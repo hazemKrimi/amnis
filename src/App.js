@@ -4,16 +4,18 @@ import { Switch, Route } from 'react-router-dom';
 import GlobalStyles from './components/GlobalStyles';
 import Loader from './components/Loader';
 
-const Landing = lazy(() => import('./pages/Landing'));
+const Nav = lazy(() => import('./components/Nav'));
+// const Landing = lazy(() => import('./pages/Landing'));
 
 const App = () => {
   return (
     <MainContextProvider>
       <GlobalStyles />
       <Suspense fallback={<Loader />}>
+        <Nav />
         <Switch>
           <Route>
-            <Landing />
+            {/* <Landing /> */}
           </Route>
         </Switch>
       </Suspense>
