@@ -1,17 +1,18 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
+import { reducer, TOGGLE_DARK_MODE, SET_OFFLINE, SET_ONLINE } from './reducers/mainReducer';
 
 export const MainContext = createContext();
 
 const MainContextProvider = ({ children }) => {
-    const [darkMode, setDarkMode] = useState(false);
-    const [offline, setOffline] = useState(false);
-    const toggleDarkMode = () => setDarkMode(!darkMode);
+    const [{ darkMode, offline }, dispatch] = useReducer(reducer, { darkMode: false, offline: false });
+
+    const toggleDarkMode = () => dispatch({ type: TOGGLE_DARK_MODE });
 
     useEffect(() => {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) setDarkMode(true);
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) dispatch({ type: TOGGLE_DARK_MODE });
 
-        window.addEventListener('offline', () => setOffline(true));
-        window.addEventListener('online', () => setOffline(false));
+        window.addEventListener('offline', () => dispatch({ type: SET_OFFLINE }));
+        window.addEventListener('online', () => dispatch({ type: SET_ONLINE }));
     }, []);
 
     return (
