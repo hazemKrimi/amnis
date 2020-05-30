@@ -14,7 +14,7 @@ const Navbar = styled.nav`
         width: 90%;
         margin: auto;
         display: grid;
-        grid-template-columns: 1fr 1.5fr 1fr;
+        grid-template-columns: 1fr repeat(2, 1.5fr);
         column-gap: 3rem;
         align-items: center;
 

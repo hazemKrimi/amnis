@@ -12,6 +12,8 @@ const SearchBar = styled.div`
         border: none;
         color: ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
         padding-left: 0.5rem;
+        font-size: 1rem;
+        font-weight: 400;
 
         &::placeholder {
             font-size: 1rem;
