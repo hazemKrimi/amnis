@@ -12,6 +12,7 @@ const Styles = createGlobalStyle`
         white-space: nowrap;
         font-family: 'Open Sans';
         color: ${({ darkMode }) => darkMode ? '#FFFFFF' : '#07070A'};
+        transition: color linear 0.2s, background-color linear 0.2s;
     }
 
     body {
