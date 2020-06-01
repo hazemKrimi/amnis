@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { MainContext } from '../contexts/MainContext';
+import SignUp from '../components/SignUp';
+import LogIn from '../components/LogIn';
 
 const Landing = () => {
+    const { showSignUp, showLogIn } = useContext(MainContext);
+
     return (
-        <div>Landing Page</div>
+        <>
+            { showSignUp && <SignUp /> }
+            { showLogIn && <LogIn /> }
+        </>
     )
 };
 

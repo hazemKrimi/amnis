@@ -33,8 +33,8 @@ const Navbar = styled.nav`
             justify-items: flex-end;
 
             svg {
-                width: 2rem;
-                height: 2rem;
+                width: 1.5rem;
+                height: 1.5rem;
                 cursor: pointer;
             }
         }
@@ -42,7 +42,7 @@ const Navbar = styled.nav`
 `;
 
 const Nav = () => {
-    const { darkMode, toggleDarkMode } = useContext(MainContext);
+    const { darkMode, toggleDarkMode, openSignUp, openLogIn } = useContext(MainContext);
 
     return ( 
         <Navbar darkMode={darkMode}>
@@ -76,8 +76,8 @@ const Nav = () => {
                                 <line y1="2.453" x2="2.453" transform="translate(30.985 6.562)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                             </svg>
                     }
-                    <Button text='Log In' />
-                    <Button text='Sign Up' mode='action' />
+                    <Button text='Log In' onClick={openLogIn} />
+                    <Button text='Sign Up' mode='action' onClick={openSignUp} />
                 </nav>
             </nav>
         </Navbar>
