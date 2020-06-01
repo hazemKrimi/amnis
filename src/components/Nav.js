@@ -32,6 +32,14 @@ const Navbar = styled.nav`
             column-gap: 1rem;
             justify-items: flex-end;
 
+            @media (min-width: 1440px) {
+                column-gap: 0rem;
+
+                * {
+                    width: 100%;
+                }
+            }
+
             svg {
                 width: 1.5rem;
                 height: 1.5rem;
