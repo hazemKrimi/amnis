@@ -21,7 +21,6 @@ const Navbar = styled.nav`
         h2 {
             font-family: 'Poppins';
             font-size: 40;
-            font-weight: bold;
         }
 
         #buttons {
