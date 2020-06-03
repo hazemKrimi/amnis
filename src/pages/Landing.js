@@ -1,8 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { MainContext } from '../contexts/MainContext';
-import SignUp from '../components/SignUp';
-import LogIn from '../components/LogIn';
 
 const Container = styled.div`
     width: 90%;
@@ -15,13 +12,9 @@ const Container = styled.div`
 `;
 
 const Landing = () => {
-    const { showSignUp, showLogIn } = useContext(MainContext);
-
     return (
         <Container>
             <h2>Live</h2>
-            { showSignUp && <SignUp /> }
-            { showLogIn && <LogIn /> }
             <h2>Categories</h2>
         </Container>
     )

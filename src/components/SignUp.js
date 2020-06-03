@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
+import { AuthContext } from '../contexts/AuthContext';
 import Button from './Button';
 
 const Overlay = styled.div`
@@ -59,13 +60,21 @@ const Form = styled.form`
     }
 `;
 
-const SignUp = () => {
-    const { darkMode, closeSignUp } = useContext(MainContext);
+const SignUp = ({ close }) => {
+    const { darkMode } = useContext(MainContext);
+    const { signUp } = useContext(AuthContext);
+    const ref = useRef();
+
+    useEffect(() => {
+        document.addEventListener('click', event => {
+            if (ref.current && !ref.current.contains(event.target)) close();
+        });
+    });
 
     return (
         <Overlay>
-            <Form darkMode={darkMode}>
-                <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 20.828 20.828" onClick={() => closeSignUp()}>
+            <Form ref={ref} darkMode={darkMode}>
+                <svg viewBox="0 0 20.828 20.828" onClick={() => close()}>
                     <g id="x" transform="translate(-4.586 -4.586)">
                         <line x1="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                         <line x2="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -77,7 +86,7 @@ const SignUp = () => {
                     <input type="email" placeholder='Email' />
                     <input type="password" placeholder='Password' />
                     <input type="password" placeholder='Confirm Password' />
-                    <Button text='Sign Up' mode='form' />
+                    <Button text='Sign Up' mode='form' onClick={() => { close(); signUp(); }} />
                 </div>
             </Form>
         </Overlay>
