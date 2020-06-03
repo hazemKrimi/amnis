@@ -15,6 +15,12 @@ const Styles = createGlobalStyle`
         transition: color linear 0.2s, background-color linear 0.2s;
     }
 
+    svg {
+        cursor: pointer;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
     body {
         background-color: ${({ darkMode }) => darkMode ? '#24272B' : '#F3F4F9'};
     }

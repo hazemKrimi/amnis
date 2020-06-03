@@ -11,6 +11,7 @@ const Btn = styled.button`
     width: ${({ mode }) => mode === 'form' ? '100%' : 'initial'};
     font-size: 1rem;
     padding: ${({ mode }) => mode === 'form' ? '1rem 2rem' : '0.5rem 2rem'};
+    transition: none;
 `;
 
 const Button = ({ text, mode, onClick }) => {
