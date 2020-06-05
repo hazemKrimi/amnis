@@ -66,8 +66,16 @@ const LogIn = ({ close }) => {
     const ref = useRef();
 
     useEffect(() => {
-        document.addEventListener('click', event => {
-            if (ref.current && !ref.current.contains(event.target)) close();
+        document.addEventListener('mousedown', event => {
+            if (ref.current && ref.current.contains(event.target)) {
+                document.addEventListener('mouseup', event => {
+                    if (ref.current && !ref.current.contains(event.target)) return;
+                });
+            } else {
+                document.addEventListener('mouseup', event => {
+                    if (ref.current && !ref.current.contains(event.target)) close();
+                });
+            }
         });
     });
 

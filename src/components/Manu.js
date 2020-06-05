@@ -38,16 +38,24 @@ const StyledMenu = styled.div`
 const Menu = ({ position, close, type }) => {
     const { darkMode } = useContext(MainContext);
     const { logout } = useContext(AuthContext);
-    const menuRef = useRef();
+    const ref = useRef();
 
     useEffect(() => {
-        document.addEventListener('click', event => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) close();
+        document.addEventListener('mousedown', event => {
+            if (ref.current && ref.current.contains(event.target)) {
+                document.addEventListener('mouseup', event => {
+                    if (ref.current && !ref.current.contains(event.target)) return;
+                });
+            } else {
+                document.addEventListener('mouseup', event => {
+                    if (ref.current && !ref.current.contains(event.target)) close();
+                });
+            }
         });
     });
 
     return type === 'profile' ? (
-        <StyledMenu ref={menuRef} darkMode={darkMode} position={position}>
+        <StyledMenu ref={ref} darkMode={darkMode} position={position}>
             <div className="menu-item">
                 <svg viewBox="0 0 34 34">
                     <g transform="translate(1 1.247)">
@@ -78,7 +86,7 @@ const Menu = ({ position, close, type }) => {
             </div>
         </StyledMenu>
     ) : (
-        <StyledMenu ref={menuRef} darkMode={darkMode} position={position}>
+        <StyledMenu ref={ref} darkMode={darkMode} position={position}>
             <div className="menu-item">
                     <svg viewBox="0 0 36.5 36.5">
                         <g transform="translate(-2 -2)">
