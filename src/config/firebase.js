@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 let firebaseConfig = {
-    apiKey: "AIzaSyBfG3yrOOKbBPdCjvSs6zrp_PMw1Fh07ik",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "amnis-bc042.firebaseapp.com",
     databaseURL: "https://amnis-bc042.firebaseio.com",
     projectId: "amnis-bc042",
@@ -13,6 +13,5 @@ let firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-firebase.firestore().settings({ timestampsInSnapshots: true });
-
+firebase.firestore();
 export default firebase;
