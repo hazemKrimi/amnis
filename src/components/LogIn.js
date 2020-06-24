@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { AuthContext } from '../contexts/AuthContext';
@@ -64,6 +64,8 @@ const LogIn = ({ close }) => {
     const { darkMode } = useContext(MainContext);
     const { logIn } = useContext(AuthContext);
     const ref = useRef();
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
 
     useEffect(() => {
         document.addEventListener('mousedown', event => {
@@ -81,7 +83,7 @@ const LogIn = ({ close }) => {
 
     return (
         <Overlay>
-            <Form ref={ref} darkMode={darkMode}>
+            <Form ref={ref} darkMode={darkMode} onSubmit={async event => { event.preventDefault(); await logIn(email, password); close(); }}>
                 <svg viewBox="0 0 20.828 20.828" onClick={() => close()}>
                     <g id="x" transform="translate(-4.586 -4.586)">
                         <line x1="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -90,9 +92,9 @@ const LogIn = ({ close }) => {
                 </svg>
                 <div>
                     <h2>Log In</h2>
-                    <input type="email" placeholder='Email' />
-                    <input type="password" placeholder='Password' />
-                    <Button text='Log In' mode='form' onClick={() => { close(); logIn(); }} />
+                    <input type="email" placeholder='Email' value={email} onChange={event => setEmail(event.target.value)} />
+                    <input type="password" placeholder='Password' value={password} onChange={event => setPassword(event.target.value)} />
+                    <Button text='Log In' mode='form' />
                 </div>
             </Form>
         </Overlay>

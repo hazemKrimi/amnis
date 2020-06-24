@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { AuthContext } from '../contexts/AuthContext';
@@ -64,6 +64,10 @@ const SignUp = ({ close }) => {
     const { darkMode } = useContext(MainContext);
     const { signUp } = useContext(AuthContext);
     const ref = useRef();
+    const [ username, setUsername ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ confirmPassword, setConfirmPassword ] = useState('');
 
     useEffect(() => {
         document.addEventListener('mousedown', event => {
@@ -81,7 +85,7 @@ const SignUp = ({ close }) => {
 
     return (
         <Overlay>
-            <Form ref={ref} darkMode={darkMode}>
+            <Form ref={ref} darkMode={darkMode} onSubmit={async event => { event.preventDefault(); await signUp(username, email, password); close(); }}>
                 <svg viewBox="0 0 20.828 20.828" onClick={() => close()}>
                     <g id="x" transform="translate(-4.586 -4.586)">
                         <line x1="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -90,11 +94,11 @@ const SignUp = ({ close }) => {
                 </svg>
                 <div>
                     <h2>Sign Up</h2>
-                    <input type="text" placeholder='Username' />
-                    <input type="email" placeholder='Email' />
-                    <input type="password" placeholder='Password' />
-                    <input type="password" placeholder='Confirm Password' />
-                    <Button text='Sign Up' mode='form' onClick={() => { close(); signUp(); }} />
+                    <input type="text" placeholder='Username' value={username} onChange={event => setUsername(event.target.value)} />
+                    <input type="email" placeholder='Email' value={email} onChange={event => setEmail(event.target.value)} />
+                    <input type="password" placeholder='Password' value={password} onChange={event => setPassword(event.target.value)} />
+                    <input type="password" placeholder='Confirm Password' value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} />
+                    <Button text='Sign Up' mode='form' />
                 </div>
             </Form>
         </Overlay>
