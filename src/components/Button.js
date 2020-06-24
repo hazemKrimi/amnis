@@ -16,7 +16,7 @@ const Btn = styled.button`
 
 const Button = ({ text, mode, onClick }) => {
     return ( 
-        <Btn mode={mode} onClick={() => onClick()}>{text}</Btn>
+        <Btn mode={mode} onClick={() => onClick && onClick()} type='submit'>{text}</Btn>
     );
 }
  
