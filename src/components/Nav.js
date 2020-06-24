@@ -67,7 +67,7 @@ const Navbar = styled.nav`
 
 const Nav = () => {
     const { darkMode, toggleDarkMode } = useContext(MainContext);
-    const { loggedIn } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [ create, setCreate ] = useState(false);
     const [ profile, setProfile ] = useState(false);
     const [ showSignUp, setSignUp ] = useState(false);
@@ -110,32 +110,41 @@ const Nav = () => {
                                     <line y1="2.453" x2="2.453" transform="translate(30.985 6.562)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                                 </svg>
                         }
-                        { loggedIn && <div id="create" ref={createRef} onClick={() => { setCreatePosition({ left: createRef.current.offsetLeft, top: createRef.current.offsetTop, width: createRef.current.offsetWidth, height: createRef.current.offsetHeight }); setCreate(true); setProfile(false); }}>
-                            <svg viewBox="0 0 34 34">
-                                <g id="plus-circle" transform="translate(-1 -1)">
-                                    <circle cx="16" cy="16" r="16" transform="translate(2 2)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                    <line y2="14" transform="translate(18 11)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line x2="14" transform="translate(11 18)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                </g>
-                            </svg>
-                        </div> }
-                        { loggedIn && <div id="profile" ref={profileRef} onClick={() => { setProfilePosition({ left: profileRef.current.offsetLeft, top: profileRef.current.offsetTop, width: profileRef.current.offsetWidth, height: profileRef.current.offsetHeight }); setProfile(true); setCreate(false); }}>
-                            <svg viewBox="0 0 34 34">
-                                <g transform="translate(1 1.247)">
-                                    <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                </g>
-                            </svg>
-                        </div> }
-                        { !loggedIn && <Button text='Log In' onClick={() => setLogIn(true)} /> }
-                        { !loggedIn && <Button text='Sign Up' mode='action' onClick={() => setSignUp(true)} /> }
+                        {
+                            user ? (
+                                <>
+                                    <div id="create" ref={createRef} onClick={() => { setCreatePosition({ left: createRef.current.offsetLeft, top: createRef.current.offsetTop, width: createRef.current.offsetWidth, height: createRef.current.offsetHeight }); setCreate(true); setProfile(false); }}>
+                                        <svg viewBox="0 0 34 34">
+                                            <g id="plus-circle" transform="translate(-1 -1)">
+                                                <circle cx="16" cy="16" r="16" transform="translate(2 2)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                                                <line y2="14" transform="translate(18 11)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                                <line x2="14" transform="translate(11 18)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div id="profile" ref={profileRef} onClick={() => { setProfilePosition({ left: profileRef.current.offsetLeft, top: profileRef.current.offsetTop, width: profileRef.current.offsetWidth, height: profileRef.current.offsetHeight }); setProfile(true); setCreate(false); }}>
+                                        <svg viewBox="0 0 34 34">
+                                            <g transform="translate(1 1.247)">
+                                                <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                                <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <Button text='Log In' onClick={() => setLogIn(true)} />
+                                    <Button text='Sign Up' mode='action' onClick={() => setSignUp(true)} />
+                                </>
+                            )
+                        }
                     </nav>
                 </nav>
             </Navbar>
-            { loggedIn && create && <Menu type='create' position={createPosition} close={() => setCreate(false)} /> }
-            { loggedIn && profile && <Menu type='profile' position={profilePosition} close={() => setProfile(false)} /> }
-            { !loggedIn && showSignUp && <SignUp close={() => setSignUp(false)} /> }
-            { !loggedIn && showLogIn && <LogIn close={() => setLogIn(false)} /> }
+            { user && create && <Menu type='create' position={createPosition} close={() => setCreate(false)} /> }
+            { user && profile && <Menu type='profile' position={profilePosition} close={() => setProfile(false)} /> }
+            { !user && showSignUp && <SignUp close={() => setSignUp(false)} /> }
+            { !user && showLogIn && <LogIn close={() => setLogIn(false)} /> }
         </>
     );
 }
