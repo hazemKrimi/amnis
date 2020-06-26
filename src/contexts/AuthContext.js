@@ -10,14 +10,31 @@ const AuthContextProvider = ({ children }) => {
     });
 
     useEffect(() => firebase.auth().onAuthStateChanged(user => {
-        if (user) dispatch({ type: LOG_IN, payload: user });
+        if (user) dispatch({
+            type: LOG_IN,
+            payload: {
+                displayName: user.providerData[0].displayName,
+                email: user.providerData[0].email,
+                photoURL: user.providerData[0].photoURL,
+                uid: user.providerData[0].uid
+            }
+        });
         else dispatch({ type: LOG_OUT });
     }), []);
 
     const signUp = async(username, email, password) => {
         try {
             const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
-            dispatch({ type: SIGN_UP, payload: user });
+            user.updateProfile({ displayName: username });
+            dispatch({ 
+                type: SIGN_UP,
+                payload: { 
+                    displayName: user.providerData[0].displayName,
+                    email: user.providerData[0].email,
+                    photoURL: user.providerData[0].photoURL,
+                    uid: user.providerData[0].uid 
+                }
+            });
         } catch(err) {
             throw err;
         }
@@ -26,7 +43,15 @@ const AuthContextProvider = ({ children }) => {
     const logIn = async(email, password) => {
         try {
             const { user } = await firebase.auth().signInWithEmailAndPassword(email, password);
-            dispatch({ type: LOG_IN, payload: user });
+            dispatch({
+                type: LOG_IN,
+                payload: {
+                    displayName: user.providerData[0].displayName,
+                    email: user.providerData[0].email,
+                    photoURL: user.providerData[0].photoURL,
+                    uid: user.providerData[0].uid
+                }
+            });
         } catch(err) {
             throw err;
         }
