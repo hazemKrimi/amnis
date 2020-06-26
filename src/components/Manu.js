@@ -37,7 +37,7 @@ const StyledMenu = styled.div`
 
 const Menu = ({ position, close, type }) => {
     const { darkMode } = useContext(MainContext);
-    const { logout } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const ref = useRef();
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const Menu = ({ position, close, type }) => {
                         <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                     </g>
                 </svg>
-                <h3>HazemKrimi</h3>
+                <h3>{user.displayName}</h3>
             </div>
             <div className="menu-item">
                 <svg viewBox="0 0 34 34">
