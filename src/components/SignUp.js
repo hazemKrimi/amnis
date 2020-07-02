@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { AuthContext } from '../contexts/AuthContext';
 import Button from './Button';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Overlay = styled.div`
     position: fixed;
@@ -58,16 +60,44 @@ const Form = styled.form`
         top: 0%;
         left: 100%;
     }
+
+    .error {
+        color: #FF4A4A;
+        font-size: 1rem;
+    }
 `;
 
 const SignUp = ({ close }) => {
     const { darkMode } = useContext(MainContext);
     const { signUp } = useContext(AuthContext);
     const ref = useRef();
-    const [ username, setUsername ] = useState('');
-    const [ email, setEmail ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ confirmPassword, setConfirmPassword ] = useState('');
+    // const [ username, setUsername ] = useState('');
+    // const [ email, setEmail ] = useState('');
+    // const [ password, setPassword ] = useState('');
+    // const [ confirmPassword, setConfirmPassword ] = useState('');
+
+    const form = useFormik({
+        initialValues: {
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        },
+        validationSchema: Yup.object().shape({
+            username: Yup.string().required('Username is required'),
+            email: Yup.string().required('Email is required').email('Email is invalid'),
+            password: Yup.string().required('Password is required').min(6, 'Password is 6 characters minimum'),
+            confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords don\'t match')
+        }),
+        onSubmit: async({ username, email, password }, { setFieldError }) => {
+            try {
+                await signUp(username, email, password);
+                close();
+            } catch(err) {
+                setFieldError('signup', err.message);
+            }
+        }
+    });
 
     useEffect(() => {
         document.addEventListener('mousedown', event => {
@@ -85,7 +115,7 @@ const SignUp = ({ close }) => {
 
     return (
         <Overlay>
-            <Form ref={ref} darkMode={darkMode} onSubmit={async event => { event.preventDefault(); await signUp(username, email, password); close(); }}>
+            <Form ref={ref} darkMode={darkMode} onSubmit={form.handleSubmit}>
                 <svg viewBox="0 0 20.828 20.828" onClick={() => close()}>
                     <g id="x" transform="translate(-4.586 -4.586)">
                         <line x1="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -94,11 +124,16 @@ const SignUp = ({ close }) => {
                 </svg>
                 <div>
                     <h2>Sign Up</h2>
-                    <input type="text" placeholder='Username' value={username} onChange={event => setUsername(event.target.value)} />
-                    <input type="email" placeholder='Email' value={email} onChange={event => setEmail(event.target.value)} />
-                    <input type="password" placeholder='Password' value={password} onChange={event => setPassword(event.target.value)} />
-                    <input type="password" placeholder='Confirm Password' value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} />
+                    <input type="text" name='username' placeholder='Username' value={form.values.username} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    { form.errors.username && form.touched.username && <p className='error'>{form.errors.username}</p> }
+                    <input type="email" name='email' placeholder='Email' value={form.values.email} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    { form.errors.email && form.touched.email && <p className='error'>{form.errors.email}</p> }
+                    <input type="password" name='password' placeholder='Password' value={form.values.password} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    { form.errors.password && form.touched.password && <p className='error'>{form.errors.password}</p> }
+                    <input type="password" name='confirmPassword' placeholder='Confirm Password' value={form.values.confirmPassword} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    { form.errors.confirmPassword && form.touched.confirmPassword && <p className='error'>{form.errors.confirmPassword}</p> }
                     <Button text='Sign Up' mode='form' />
+                    { form.errors.signup && <p className='error'>{form.errors.signup}</p> }
                 </div>
             </Form>
         </Overlay>

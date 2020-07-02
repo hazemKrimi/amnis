@@ -1,8 +1,10 @@
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { AuthContext } from '../contexts/AuthContext';
 import Button from './Button';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Overlay = styled.div`
     position: fixed;
@@ -58,14 +60,36 @@ const Form = styled.form`
         top: 0%;
         left: 100%;
     }
+
+    .error {
+        color: #FF4A4A;
+        font-size: 1rem;
+    }
 `;
 
 const LogIn = ({ close }) => {
     const { darkMode } = useContext(MainContext);
     const { logIn } = useContext(AuthContext);
     const ref = useRef();
-    const [ email, setEmail ] = useState('');
-    const [ password, setPassword ] = useState('');
+
+    const form = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        validationSchema: Yup.object().shape({
+            email: Yup.string().required('Email is required').email('Email is invalid'),
+            password: Yup.string().required('Password is required').min(6, 'Password is 6 characters minimum')
+        }),
+        onSubmit: async({ email, password }, { setFieldError }) => {
+            try {
+                await logIn(email, password);
+                close();
+            } catch(err) {
+                setFieldError('login', err.message);
+            }
+        }
+    });
 
     useEffect(() => {
         document.addEventListener('mousedown', event => {
@@ -83,7 +107,7 @@ const LogIn = ({ close }) => {
 
     return (
         <Overlay>
-            <Form ref={ref} darkMode={darkMode} onSubmit={async event => { event.preventDefault(); await logIn(email, password); close(); }}>
+            <Form ref={ref} darkMode={darkMode} onSubmit={form.handleSubmit}>
                 <svg viewBox="0 0 20.828 20.828" onClick={() => close()}>
                     <g id="x" transform="translate(-4.586 -4.586)">
                         <line x1="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -92,9 +116,12 @@ const LogIn = ({ close }) => {
                 </svg>
                 <div>
                     <h2>Log In</h2>
-                    <input type="email" placeholder='Email' value={email} onChange={event => setEmail(event.target.value)} />
-                    <input type="password" placeholder='Password' value={password} onChange={event => setPassword(event.target.value)} />
+                    <input type='email' name='email' placeholder='Email' value={form.values.email} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    { form.errors.email && form.touched.email && <p className='error'>{form.errors.email}</p> }
+                    <input type='password' name='password' placeholder='Password' value={form.values.password} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    { form.errors.password && form.touched.password && <p className='error'>{form.errors.password}</p> }
                     <Button text='Log In' mode='form' />
+                    { form.errors.login && <p className='error'>{form.errors.login}</p> }
                 </div>
             </Form>
         </Overlay>
