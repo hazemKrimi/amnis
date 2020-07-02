@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { AuthContext } from '../contexts/AuthContext';
@@ -71,10 +71,6 @@ const SignUp = ({ close }) => {
     const { darkMode } = useContext(MainContext);
     const { signUp } = useContext(AuthContext);
     const ref = useRef();
-    // const [ username, setUsername ] = useState('');
-    // const [ email, setEmail ] = useState('');
-    // const [ password, setPassword ] = useState('');
-    // const [ confirmPassword, setConfirmPassword ] = useState('');
 
     const form = useFormik({
         initialValues: {
