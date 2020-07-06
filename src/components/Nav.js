@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
-import { AuthContext } from '../contexts/AuthContext';
+import { UserContext } from '../contexts/UserContext';
 import Search from './Search';
 import Button from './Button';
 import Menu from './Manu';
@@ -67,7 +67,7 @@ const Navbar = styled.nav`
 
 const Nav = () => {
     const { darkMode, toggleDarkMode } = useContext(MainContext);
-    const { user } = useContext(AuthContext);
+    const { user } = useContext(UserContext);
     const [ create, setCreate ] = useState(false);
     const [ profile, setProfile ] = useState(false);
     const [ showSignUp, setSignUp ] = useState(false);

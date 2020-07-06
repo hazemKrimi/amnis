@@ -1,10 +1,10 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import { reducer, SIGN_UP, LOG_IN, LOG_OUT } from './reducers/authReducer';
+import { reducer, SIGN_UP, LOG_IN, LOG_OUT } from './reducers/userReducer';
 import firebase from '../config/firebase';
 
-export const AuthContext = createContext();
+export const UserContext = createContext();
 
-const AuthContextProvider = ({ children }) => {
+const UserContextProvider = ({ children }) => {
     const [{ user }, dispatch] = useReducer(reducer, {
         user: null
     });
@@ -56,7 +56,7 @@ const AuthContextProvider = ({ children }) => {
             throw err;
         }
     }
-    const logout = async() => {
+    const logOut = async() => {
         try {
             await firebase.auth().signOut();
             dispatch({ type: LOG_OUT });
@@ -66,10 +66,10 @@ const AuthContextProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, signUp, logIn, logout }}>
+        <UserContext.Provider value={{ user, signUp, logIn, logOut }}>
             {children}
-        </AuthContext.Provider>
+        </UserContext.Provider>
     )
 };
 
-export default AuthContextProvider;
+export default UserContextProvider;

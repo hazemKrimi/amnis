@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import MainContextProvider from './contexts/MainContext';
-import AuthContextProvider from './contexts/AuthContext';
+import UserContextProvider from './contexts/UserContext';
 import { Switch, Route } from 'react-router-dom';
 import GlobalStyles from './components/GlobalStyles';
 import Loader from './components/Loader';
@@ -12,7 +12,7 @@ const Settings = lazy(() => import('./pages/Settings'));
 const App = () => {
   return (
     <MainContextProvider>
-      <AuthContextProvider>
+      <UserContextProvider>
         <GlobalStyles />
         <Suspense fallback={<Loader />}>
           <Nav />
@@ -25,7 +25,7 @@ const App = () => {
             </Route>
           </Switch>
         </Suspense>
-      </AuthContextProvider>
+      </UserContextProvider>
     </MainContextProvider>
   );
 }

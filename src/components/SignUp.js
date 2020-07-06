@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
-import { AuthContext } from '../contexts/AuthContext';
+import { UserContext } from '../contexts/UserContext';
 import Button from './Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -75,7 +75,7 @@ const Form = styled.form`
 
 const SignUp = ({ close }) => {
     const { darkMode } = useContext(MainContext);
-    const { signUp } = useContext(AuthContext);
+    const { signUp } = useContext(UserContext);
     const ref = useRef();
     const history = useHistory();
 

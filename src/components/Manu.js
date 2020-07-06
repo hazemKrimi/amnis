@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
-import { AuthContext } from '../contexts/AuthContext';
+import { UserContext } from '../contexts/UserContext';
 import { useHistory } from 'react-router-dom';
 
 const StyledMenu = styled.div`
@@ -38,7 +38,7 @@ const StyledMenu = styled.div`
 
 const Menu = ({ position, close, type }) => {
     const { darkMode } = useContext(MainContext);
-    const { user, logout } = useContext(AuthContext);
+    const { user, logOut } = useContext(UserContext);
     const ref = useRef();
     const history = useHistory();
 
@@ -67,7 +67,7 @@ const Menu = ({ position, close, type }) => {
                 </svg>
                 <h3>{user.displayName}</h3>
             </div>
-            <div className="menu-item">
+            <div className="menu-item" onClick={() => { close(); history.push('/settings'); }}>
                 <svg viewBox="0 0 34 34">
                     <g transform="translate(1 1)">
                         <circle cx="3" cy="3" r="3" transform="translate(13 12.85)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -76,7 +76,7 @@ const Menu = ({ position, close, type }) => {
                 </svg>
                 <h3>Settings</h3>
             </div>
-            <div className="menu-item" id="logout" onClick={async() => { await logout(); close(); history.push('/'); }}>
+            <div className="menu-item" id="logout" onClick={async() => { await logOut(); close(); history.push('/'); }}>
                 <svg viewBox="0 0 30 30">
                     <g transform="translate(-2 -2)">
                         <path d="M12.333,31H6.111A3.111,3.111,0,0,1,3,27.889V6.111A3.111,3.111,0,0,1,6.111,3h6.222" transform="translate(0 0)" fill="none" stroke="#ff4a4a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
