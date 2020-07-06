@@ -7,6 +7,7 @@ import Loader from './components/Loader';
 
 const Nav = lazy(() => import('./components/Nav'));
 const Landing = lazy(() => import('./pages/Landing'));
+const Settings = lazy(() => import('./pages/Settings'));
 
 const App = () => {
   return (
@@ -18,6 +19,9 @@ const App = () => {
           <Switch>
             <Route path='/' exact>
               <Landing />
+            </Route>
+            <Route path='/settings' exact>
+              <Settings />
             </Route>
           </Switch>
         </Suspense>
