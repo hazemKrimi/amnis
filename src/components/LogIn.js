@@ -28,8 +28,8 @@ const Form = styled.form`
 
     div {
         display: grid;
-        grid-template-columns: auto;
-        row-gap: 2rem;
+        grid-template-columns: 1fr;
+        row-gap: 1rem;
         justify-content: center;
         align-items: center;
 
@@ -42,9 +42,14 @@ const Form = styled.form`
             background: ${({ darkMode }) => darkMode ? 'rgba(74, 82, 90, 0.5)' : 'rgba(255, 255, 255, 0.5)'};
             border: none;
             color: ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
-            padding: 1rem 10rem 1rem 0.5rem;
+            width: 35vw;
+            padding: 1rem 0.5rem;
             font-size: 1rem;
             font-weight: 400;
+
+            @media (min-width: 1440px) {
+                width: 30vw;
+            }
 
             &::placeholder {
                 font-size: 1rem;
