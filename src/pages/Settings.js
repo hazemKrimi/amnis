@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 
 const Container = styled.div`
     width: 90%;
@@ -12,10 +14,18 @@ const Container = styled.div`
 `;
 
 const Settings = () => {
+    const { user } = useContext(UserContext);
+    
     return (
-        <Container>
-            <h2>Settings</h2>
-        </Container>
+        <>
+            {
+                user ?
+                    <Container>
+                        <h2>Settings</h2>
+                    </Container>
+                : <Redirect to='/' />
+            }
+        </>
     )
 };
 
