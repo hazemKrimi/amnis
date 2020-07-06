@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { AuthContext } from '../contexts/AuthContext';
+import { useHistory } from 'react-router-dom';
 
 const StyledMenu = styled.div`
     background-color: ${({ darkMode }) => darkMode ? '#24272B' : '#F3F4F9'};
@@ -39,6 +40,7 @@ const Menu = ({ position, close, type }) => {
     const { darkMode } = useContext(MainContext);
     const { user, logout } = useContext(AuthContext);
     const ref = useRef();
+    const history = useHistory();
 
     useEffect(() => {
         document.addEventListener('mousedown', event => {
@@ -74,7 +76,7 @@ const Menu = ({ position, close, type }) => {
                 </svg>
                 <h3>Settings</h3>
             </div>
-            <div className="menu-item" id="logout" onClick={() => { close(); logout(); }}>
+            <div className="menu-item" id="logout" onClick={async() => { await logout(); close(); history.push('/'); }}>
                 <svg viewBox="0 0 30 30">
                     <g transform="translate(-2 -2)">
                         <path d="M12.333,31H6.111A3.111,3.111,0,0,1,3,27.889V6.111A3.111,3.111,0,0,1,6.111,3h6.222" transform="translate(0 0)" fill="none" stroke="#ff4a4a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />

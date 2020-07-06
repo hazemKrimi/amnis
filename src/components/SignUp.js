@@ -5,6 +5,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import Button from './Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useHistory } from 'react-router-dom';
 
 const Overlay = styled.div`
     position: fixed;
@@ -76,6 +77,7 @@ const SignUp = ({ close }) => {
     const { darkMode } = useContext(MainContext);
     const { signUp } = useContext(AuthContext);
     const ref = useRef();
+    const history = useHistory();
 
     const form = useFormik({
         initialValues: {
@@ -94,6 +96,7 @@ const SignUp = ({ close }) => {
             try {
                 await signUp(username, email, password);
                 close();
+                history.push('/');
             } catch(err) {
                 setFieldError('signup', err.message);
             }
