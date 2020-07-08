@@ -26,6 +26,9 @@ const UserContextProvider = ({ children }) => {
         try {
             const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
             user.updateProfile({ displayName: username });
+            await firebase.firestore().collection('users').doc(user.uid).set({
+                videos: []
+            });
             dispatch({ 
                 type: SIGN_UP,
                 payload: { 
