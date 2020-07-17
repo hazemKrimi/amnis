@@ -111,6 +111,11 @@ const LogIn = ({ close }) => {
                 });
             }
         });
+
+        return () => {
+            document.removeEventListener('mousedown', () => {});
+            document.removeEventListener('mouseup', () => {});
+        }
     });
 
     return (
