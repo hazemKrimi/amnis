@@ -115,6 +115,11 @@ const SignUp = ({ close }) => {
                 });
             }
         });
+
+        return () => {
+            document.removeEventListener('mousedown', () => {});
+            document.removeEventListener('mouseup', () => {});
+        }
     });
 
     return (
