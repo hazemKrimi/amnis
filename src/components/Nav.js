@@ -2,9 +2,10 @@ import React, { useState, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { UserContext } from '../contexts/UserContext';
+import { useHistory } from 'react-router-dom';
 import Search from './Search';
 import Button from './Button';
-import Menu from './Manu';
+import Menu from './Menu';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
 
@@ -28,6 +29,7 @@ const Navbar = styled.nav`
 
         h2 {
             font-family: 'Poppins';
+            cursor: pointer;
         }
 
         #buttons {
@@ -76,12 +78,13 @@ const Nav = () => {
     const [ profilePosition, setProfilePosition ] = useState(null);
     const createRef = useRef();
     const profileRef = useRef();
+    const history = useHistory();
 
     return ( 
         <>
             <Navbar darkMode={darkMode}>
                 <nav>
-                    <h2>Amnis</h2>
+                    <h2 onClick={() => history.push('/')}>Amnis</h2>
                     <Search />
                     <nav id="buttons">
                         {
