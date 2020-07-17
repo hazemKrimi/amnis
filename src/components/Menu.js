@@ -54,6 +54,11 @@ const Menu = ({ position, close, type }) => {
                 });
             }
         });
+
+        return () => {
+            document.removeEventListener('mousedown', () => {});
+            document.removeEventListener('mouseup', () => {});
+        }
     });
 
     return type === 'profile' ? (
