@@ -94,7 +94,7 @@ const Menu = ({ position, close, type }) => {
         </StyledMenu>
     ) : (
         <StyledMenu ref={ref} darkMode={darkMode} position={position}>
-            <div className="menu-item">
+            <div className="menu-item" onClick={() => { close(); history.push('/upload'); }}>
                     <svg viewBox="0 0 36.5 36.5">
                         <g transform="translate(-2 -2)">
                             <path d="M37.5,15v7.667A3.833,3.833,0,0,1,33.667,26.5H6.833A3.833,3.833,0,0,1,3,22.667V15" transform="translate(0 11)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />

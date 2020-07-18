@@ -8,6 +8,7 @@ import Loader from './components/Loader';
 const Nav = lazy(() => import('./components/Nav'));
 const Landing = lazy(() => import('./pages/Landing'));
 const Settings = lazy(() => import('./pages/Settings'));
+const Upload = lazy(() => import('./pages/Upload'));
 
 const App = () => {
   return (
@@ -22,6 +23,9 @@ const App = () => {
             </Route>
             <Route path='/settings' exact>
               <Settings />
+            </Route>
+            <Route path='/upload' exact>
+              <Upload />
             </Route>
           </Switch>
         </Suspense>
