@@ -27,6 +27,42 @@ const Container = styled.div`
             padding: 0;
         }
     }
+
+    #file-upload {
+        cursor: pointer;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        height: 15rem;
+        border: 3px dotted ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
+
+        h2 {
+            font-family: 'Poppins';
+            font-size: 30;
+        }
+    }
+
+    #inputs {
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 2rem;
+        justify-content: center;
+        align-items: center;
+
+        input {
+            background: ${({ darkMode }) => darkMode ? 'rgba(74, 82, 90, 0.5)' : 'rgba(255, 255, 255, 0.5)'};
+            border: none;
+            color: ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
+            width: 100%;
+            padding: 1rem 0.5rem;
+            font-size: 1rem;
+            font-weight: 400;
+
+            &::placeholder {
+                font-size: 1rem;
+            }
+        }
+    }
 `;
 
 const Upload = () => {
@@ -42,6 +78,14 @@ const Upload = () => {
                         <div id='section-header'>
                             <h2>Upload</h2>
                             <Button text='Cancel' onClick={() => history.goBack()} />
+                        </div>
+                        <div id='file-upload'>
+                            <h2>Drop here or click to upload video</h2>
+                        </div>
+                        <div id='inputs'>
+                            <input type="text" name='title' placeholder='Title' />
+                            <input type="text" name='description' placeholder='Description' />
+                            <Button mode='form' text='Submit' />
                         </div>
                     </Container>
                     : <Redirect to='/' />
