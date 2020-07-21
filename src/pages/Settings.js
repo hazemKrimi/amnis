@@ -171,7 +171,7 @@ const Settings = () => {
                     <Container darkMode={darkMode}>
                         <div id='section-header'>
                             <h2>Settings</h2>
-                            <Button text='Cancel' onClick={() => history.goBack()} />
+                            <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
                         <div id="main-info">
                             <h2>Main Info</h2>

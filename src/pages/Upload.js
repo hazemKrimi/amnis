@@ -78,7 +78,7 @@ const Upload = () => {
                     <Container darkMode={darkMode}>
                         <div id='section-header'>
                             <h2>Upload</h2>
-                            <Button text='Cancel' onClick={() => history.goBack()} />
+                            <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
                         <label htmlFor="video">
                             <div id='file-upload'>
