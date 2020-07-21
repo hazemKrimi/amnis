@@ -34,11 +34,12 @@ const Container = styled.div`
         justify-content: center;
         align-items: center;
         height: 15rem;
-        border: 3px dotted ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
+        border: 3px dashed ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
 
         h2 {
             font-family: 'Poppins';
             font-size: 30;
+            cursor: pointer;
         }
     }
 
@@ -79,9 +80,12 @@ const Upload = () => {
                             <h2>Upload</h2>
                             <Button text='Cancel' onClick={() => history.goBack()} />
                         </div>
-                        <div id='file-upload'>
-                            <h2>Drop here or click to upload video</h2>
-                        </div>
+                        <label htmlFor="video">
+                            <div id='file-upload'>
+                                <h2>Upload video</h2>
+                                <input type="file" accept='video/*' name="video" id="video" style={{ display: 'none' }} />
+                            </div>
+                        </label>
                         <div id='inputs'>
                             <input type="text" name='title' placeholder='Title' />
                             <input type="text" name='description' placeholder='Description' />

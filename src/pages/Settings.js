@@ -52,6 +52,10 @@ const Container = styled.div`
                     width: 3.5rem;
                     height: 3.5rem;
                 }
+
+                p {
+                    cursor: pointer;
+                }
             }
 
             #inputs {
@@ -131,18 +135,26 @@ const Photo = ({ darkMode }) => {
 
     return (
         <div id="profile" ref={ref}>
-            {
-                !hovered ? (
-                    <svg viewBox="0 0 34 34">
-                        <g transform="translate(1 1.247)">
-                            <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                            <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                        </g>
-                    </svg>
-                ) : (
-                    <p>Upload</p>
-                )
-            }
+            <label htmlFor="avatar">
+                {
+                    !hovered ? (
+                        <>
+                            <svg viewBox="0 0 34 34">
+                                <g transform="translate(1 1.247)">
+                                    <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                    <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                </g>
+                            </svg>
+                            <input type="file" accept='image/png, image/jpeg' name="avatar" id="avatar" style={{ display: 'none' }}/>
+                        </>
+                    ) : (
+                            <>
+                                <p>Upload</p>
+                                <input type="file" accept='image/png, image/jpeg' name="avatar" id="avatar" style={{ display: 'none' }}/>
+                            </>
+                        )
+                }
+            </label>
         </div>
     );
 }
