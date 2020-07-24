@@ -45,11 +45,13 @@ const Navbar = styled.nav`
             }
 
             #create {
+                cursor: pointer;
                 display: grid;
                 align-items: center;
             }
 
             #profile {
+                cursor: pointer;
                 width: 2.5rem;
                 height: 2.5rem;
                 border-radius: 50%;
