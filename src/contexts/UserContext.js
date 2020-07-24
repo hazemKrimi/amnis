@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import { reducer, SIGN_UP, LOG_IN, LOG_OUT } from './reducers/userReducer';
+import { reducer, SIGN_UP, LOG_IN, LOG_OUT, UPDATE_USER } from './reducers/userReducer';
 import firebase from '../config/firebase';
 
 export const UserContext = createContext();
@@ -59,6 +59,7 @@ const UserContextProvider = ({ children }) => {
             throw err;
         }
     }
+
     const logOut = async() => {
         try {
             await firebase.auth().signOut();
@@ -68,8 +69,28 @@ const UserContextProvider = ({ children }) => {
         }
     }
 
+    const updateAccount = async(username, email, avatar, password) => {
+        try {
+            if (username) await firebase.auth().currentUser.updateProfile({ displayName: username });
+            if (email) await firebase.auth().currentUser.updateEmail(email);
+            if (avatar) await firebase.auth().currentUser.updateProfile({ photoURL: avatar });
+            if (password) await firebase.auth().currentUser.updatePassword(password);
+            dispatch({
+                type: UPDATE_USER,
+                payload: {
+                    displayName: username ? username : firebase.auth().currentUser.displayName,
+                    email: email ? email : firebase.auth().currentUser.email,
+                    photoURL: avatar ? avatar : firebase.auth().currentUser.photoURL,
+                    uid: firebase.auth().currentUser.uid
+                }
+            });
+        } catch(err) {
+            throw err;
+        }
+    }
+
     return (
-        <UserContext.Provider value={{ user, signUp, logIn, logOut }}>
+        <UserContext.Provider value={{ user, signUp, logIn, logOut, updateAccount }}>
             {children}
         </UserContext.Provider>
     )
