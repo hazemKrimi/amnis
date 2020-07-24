@@ -4,6 +4,8 @@ import { UserContext } from '../contexts/UserContext';
 import styled from 'styled-components';
 import { Redirect, useHistory } from 'react-router-dom';
 import Button from '../components/Button';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Container = styled.div`
     width: 90%;
@@ -136,7 +138,6 @@ const Photo = ({ darkMode }) => {
     return (
         <label htmlFor="avatar">
             <div id="profile" ref={ref}>
-                
                     {
                         !hovered ? (
                             <>
@@ -153,16 +154,54 @@ const Photo = ({ darkMode }) => {
                                 </>
                             )
                     }
-                    <input type="file" accept='image/png, image/jpeg' name="avatar" id="avatar" style={{ display: 'none' }} />
+                    <input type="file" accept='image/png, image/jpeg' name="avatar" id="avatar" onChange={() => {}} style={{ display: 'none' }} />
             </div>
         </label>
     );
 }
 
 const Settings = () => {
-    const { user } = useContext(UserContext);
+    const { user, updateAccount } = useContext(UserContext);
     const { darkMode } = useContext(MainContext);
     const history = useHistory();
+
+    const mainInfoForm = useFormik({
+        initialValues: {
+            username: '',
+            email: ''
+        },
+        // validationSchema: Yup.object().shape({
+        //     username: Yup.string(),
+        //     email: Yup.string().email('Email is invalid')
+        // }),
+        onSubmit: async({ username, email }, { setFieldError }) => {
+            try {
+                await updateAccount(username, email, null, null);
+                history.push('/');
+            } catch(err) {
+                setFieldError('mainInfo', err.message);
+            }
+        }
+    });
+
+    const securityForm = useFormik({
+        initialValues: {
+            newPassword: '',
+            confirmNewPassword: ''
+        },
+        // validationSchema: Yup.object().shape({
+        //     newPassword: Yup.string().required('Password is required').min(6, 'Password is 6 characters minimum'),
+        //     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword')], 'Passwords don\'t match')
+        // }),
+        onSubmit: async({ password }, { setFieldError }) => {
+            try {
+                await updateAccount(null, null, null, password);
+                history.push('/');
+            } catch(err) {
+                setFieldError('mainInfo', err.message);
+            }
+        }
+    });
     
     return (
         <>
@@ -173,26 +212,25 @@ const Settings = () => {
                             <h2>Settings</h2>
                             <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
-                        <div id="main-info">
+                        <form id="main-info" onSubmit={mainInfoForm.handleSubmit}>
                             <h2>Main Info</h2>
                             <div id='form'>
                                 <Photo darkMode={darkMode} />
                                 <div id="inputs">
-                                    <input type="text" name='username' placeholder='Username' />
-                                    <input type="email" name='email' placeholder='Email' />
+                                    <input type="text" name='username' placeholder='Username' value={mainInfoForm.values.username} onChange={mainInfoForm.handleChange} onBlur={mainInfoForm.handleBlur} />
+                                    <input type="email" name='email' placeholder='Email' value={mainInfoForm.values.email} onChange={mainInfoForm.handleChange} onBlur={mainInfoForm.handleBlur} />
                                 </div>
                             </div>
                             <Button mode='form' text='Save' />
-                        </div>
-                        <div id="security">
+                        </form>
+                        <form id="security" onSubmit={securityForm.handleSubmit}>
                             <h2>Security</h2>
                             <div id="form">
-                                <input type="password" name='password' placeholder='Password' />
-                                <input type="password" name='newPassword' placeholder='New Password' />
-                                <input type="password" name='confirmNewPassword' placeholder='Confirm New Password' />
+                                <input type="password" name='newPassword' placeholder='New Password' value={securityForm.values.newPassword} onChange={securityForm.handleChange} onBlur={securityForm.handleBlur} />
+                                <input type="password" name='confirmNewPassword' placeholder='Confirm New Password' value={securityForm.values.confirmNewPassword} onChange={securityForm.handleChange} onBlur={securityForm.handleBlur} />
                             </div>
                             <Button mode='form' text='Save' />
-                        </div>
+                        </form>
                         <div id="danger-zone">
                             <h2>Danger Zone</h2>
                             <Button mode='danger' text='Delete Account' />
