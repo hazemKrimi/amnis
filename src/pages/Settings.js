@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Redirect, useHistory } from 'react-router-dom';
 import Button from '../components/Button';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 
 const Container = styled.div`
     width: 90%;
