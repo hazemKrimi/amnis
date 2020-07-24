@@ -28,6 +28,7 @@ const Navbar = styled.nav`
         }
 
         h2 {
+            width: 3rem;
             font-family: 'Poppins';
             cursor: pointer;
         }
