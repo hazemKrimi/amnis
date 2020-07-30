@@ -69,7 +69,7 @@ const Form = styled.form`
 
     .error {
         color: #FF4A4A;
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
 `;
 
