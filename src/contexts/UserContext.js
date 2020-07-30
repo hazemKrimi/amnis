@@ -73,7 +73,12 @@ const UserContextProvider = ({ children }) => {
         try {
             if (username) await firebase.auth().currentUser.updateProfile({ displayName: username });
             if (email) await firebase.auth().currentUser.updateEmail(email);
-            if (avatar) await firebase.auth().currentUser.updateProfile({ photoURL: avatar });
+            if (avatar) {
+                const snapshot = await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}/avatar.png`).put(avatar);
+                const url = await snapshot.ref.getDownloadURL();
+                await firebase.auth().currentUser.updateProfile({ photoURL: url });
+                avatar = url;
+            }
             if (password) await firebase.auth().currentUser.updatePassword(password);
             dispatch({
                 type: UPDATE_USER,
