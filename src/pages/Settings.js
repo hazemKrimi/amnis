@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Redirect, useHistory } from 'react-router-dom';
 import Button from '../components/Button';
 import { useFormik } from 'formik';
-// import * as Yup from 'yup';
+import * as Yup from 'yup';
 
 const Container = styled.div`
     width: 90%;
@@ -50,6 +50,12 @@ const Container = styled.div`
                 justify-items: center;
                 align-items: center;
 
+                #avatar {
+                    width: 7rem;
+                    height: 7rem;
+                    border-radius: 50%;
+                }
+
                 svg {
                     width: 3.5rem;
                     height: 3.5rem;
@@ -57,6 +63,20 @@ const Container = styled.div`
 
                 p {
                     cursor: pointer;
+                }
+
+                .hovered {
+                    position: relative;
+                    top: 0%;
+                    left: 0%;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    background: rgba(0, 0, 0, 0.5);
+                    color: white;
+                    display: grid;
+                    justify-content: center;
+                    align-items: center;
                 }
             }
 
@@ -79,6 +99,11 @@ const Container = styled.div`
                     &::placeholder {
                         font-size: 1rem;
                     }
+                }
+
+                .error {
+                    color: #FF4A4A;
+                    font-size: 0.8rem;
                 }
             }
         }
@@ -109,6 +134,11 @@ const Container = styled.div`
                     font-size: 1rem;
                 }
             }
+
+            .error {
+                color: #FF4A4A;
+                font-size: 0.8rem;
+            }
         }
     }
 
@@ -120,6 +150,7 @@ const Container = styled.div`
 `;
 
 const Photo = ({ darkMode }) => {
+    const { user, updateAccount } = useContext(UserContext);
     const [ hovered, setHovered ] = useState(false);
     const ref = useRef();
 
@@ -136,26 +167,28 @@ const Photo = ({ darkMode }) => {
     }, []);
 
     return (
-        <label htmlFor="avatar">
+        <label htmlFor="avatar-upload">
             <div id="profile" ref={ref}>
-                    {
-                        !hovered ? (
-                            <>
+                {
+                    user.photoURL ? (
+                        <div id='avatar' style={{ backgroundImage: `url(${user.photoURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                            { hovered && <p className='hovered'>Upload</p>}
+                        </div>
+                    ) : (
+                        <>
+                            { hovered ? <p className='hovered'>Upload</p> : (
                                 <svg viewBox="0 0 34 34">
                                     <g transform="translate(1 1.247)">
                                         <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                                         <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                                     </g>
                                 </svg>
-                            </>
-                        ) : (
-                                <>
-                                    <p>Upload</p>
-                                </>
-                            )
-                    }
-                    <input type="file" accept='image/png, image/jpeg' name="avatar" id="avatar" onChange={() => {}} style={{ display: 'none' }} />
+                            ) }
+                        </>
+                    )
+                }
             </div>
+            <input type="file" accept='image/png, image/jpeg' name="avatar" id="avatar-upload" onChange={async event => await updateAccount(null, null, event.target.files[0], null)} style={{ display: 'none' }} />
         </label>
     );
 }
@@ -170,16 +203,18 @@ const Settings = () => {
             username: '',
             email: ''
         },
-        // validationSchema: Yup.object().shape({
-        //     username: Yup.string(),
-        //     email: Yup.string().email('Email is invalid')
-        // }),
-        onSubmit: async({ username, email }, { setFieldError }) => {
+        validationSchema: Yup.object().shape({
+            username: Yup.string(),
+            email: Yup.string().email('Email is invalid')
+        }),
+        onSubmit: async({ username, email }) => {
             try {
                 await updateAccount(username, email, null, null);
-                history.push('/');
+                alert('Main info updated successfully');
+                mainInfoForm.resetForm();
             } catch(err) {
-                setFieldError('mainInfo', err.message);
+                alert('Error occured updating main info');
+                mainInfoForm.resetForm();
             }
         }
     });
@@ -189,16 +224,18 @@ const Settings = () => {
             newPassword: '',
             confirmNewPassword: ''
         },
-        // validationSchema: Yup.object().shape({
-        //     newPassword: Yup.string().required('Password is required').min(6, 'Password is 6 characters minimum'),
-        //     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword')], 'Passwords don\'t match')
-        // }),
-        onSubmit: async({ password }, { setFieldError }) => {
+        validationSchema: Yup.object().shape({
+            newPassword: Yup.string().required('Password is required').min(6, 'Password is 6 characters minimum'),
+            confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword')], 'Passwords don\'t match')
+        }),
+        onSubmit: async({ password }) => {
             try {
                 await updateAccount(null, null, null, password);
-                history.push('/');
+                alert('Password updated successfully');
+                securityForm.resetForm();
             } catch(err) {
-                setFieldError('mainInfo', err.message);
+                alert('Error occured updating password');
+                securityForm.resetForm();
             }
         }
     });
@@ -218,7 +255,9 @@ const Settings = () => {
                                 <Photo darkMode={darkMode} />
                                 <div id="inputs">
                                     <input type="text" name='username' placeholder='Username' value={mainInfoForm.values.username} onChange={mainInfoForm.handleChange} onBlur={mainInfoForm.handleBlur} />
+                                    { mainInfoForm.errors.username && mainInfoForm.touched.username && <p className='error'>{mainInfoForm.errors.username}</p> }
                                     <input type="email" name='email' placeholder='Email' value={mainInfoForm.values.email} onChange={mainInfoForm.handleChange} onBlur={mainInfoForm.handleBlur} />
+                                    { mainInfoForm.errors.email && mainInfoForm.touched.email && <p className='error'>{mainInfoForm.errors.email}</p> }
                                 </div>
                             </div>
                             <Button mode='form' text='Save' />
@@ -227,7 +266,9 @@ const Settings = () => {
                             <h2>Security</h2>
                             <div id="form">
                                 <input type="password" name='newPassword' placeholder='New Password' value={securityForm.values.newPassword} onChange={securityForm.handleChange} onBlur={securityForm.handleBlur} />
+                                { securityForm.errors.newPassword && securityForm.touched.newPassword && <p className='error'>{securityForm.errors.newPassword}</p> }
                                 <input type="password" name='confirmNewPassword' placeholder='Confirm New Password' value={securityForm.values.confirmNewPassword} onChange={securityForm.handleChange} onBlur={securityForm.handleBlur} />
+                                { securityForm.errors.confirmNewPassword && securityForm.touched.confirmNewPassword && <p className='error'>{securityForm.errors.confirmNewPassword}</p> }
                             </div>
                             <Button mode='form' text='Save' />
                         </form>
