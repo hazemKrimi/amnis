@@ -4,13 +4,15 @@ import { UserContext } from '../contexts/UserContext';
 import styled from 'styled-components';
 import { Redirect, useHistory } from 'react-router-dom';
 import Button from '../components/Button';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Container = styled.div`
     width: 90%;
     margin: 3rem auto;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 2rem;
+    row-gap: 1rem;
 
     h2 {
         font-family: 'Poppins';
@@ -46,7 +48,7 @@ const Container = styled.div`
     #inputs {
         display: grid;
         grid-template-columns: 1fr;
-        row-gap: 2rem;
+        row-gap: 1rem;
         justify-content: center;
         align-items: center;
 
@@ -64,6 +66,13 @@ const Container = styled.div`
             }
         }
     }
+
+    .error {
+        color: #FF4A4A;
+        font-size: 0.8rem;
+        width: 35vw;
+        overflow-wrap: break-word;
+    }
 `;
 
 const Upload = () => {
@@ -71,8 +80,26 @@ const Upload = () => {
     const { darkMode } = useContext(MainContext);
     const history = useHistory();
 
+    const videoUploadForm = useFormik({
+        initialValues: {
+            title: '',
+            description: '',
+            videoName: ''
+        },
+        validationSchema: Yup.object().shape({
+            title: Yup.string().required('Title is required'),
+            description: Yup.string().required('Description is required'),
+            videoName: Yup.string().required('Video is required')
+        }),
+        onSubmit: ({ title, description, video }) => {
+            console.log('Title: ', title);
+            console.log('Description: ', description);
+            console.log('Video: ', video);
+        }
+    });
+
     return (
-        <>
+        <form onSubmit={videoUploadForm.handleSubmit}>
             {
                 user ?
                     <Container darkMode={darkMode}>
@@ -83,18 +110,45 @@ const Upload = () => {
                         <label htmlFor="video">
                             <div id='file-upload'>
                                 <h2>Upload video</h2>
-                                <input type="file" accept='video/*' name="video" id="video" style={{ display: 'none' }} />
+                                <input 
+                                    type='file' 
+                                    accept='video/*' 
+                                    name='video' 
+                                    id='video' 
+                                    style={{ display: 'none' }}
+                                    onChange={event => {
+                                        videoUploadForm.setFieldValue('video', event.target.files[0]);
+                                        videoUploadForm.setFieldValue('videoName', event.target.files[0].name);
+                                    }}
+                                />
                             </div>
                         </label>
+                        { videoUploadForm.errors.videoName && videoUploadForm.touched.videoName && <p className='error'>{videoUploadForm.errors.videoName}</p> }
                         <div id='inputs'>
-                            <input type="text" name='title' placeholder='Title' />
-                            <input type="text" name='description' placeholder='Description' />
+                            <input 
+                                type='text'
+                                name='title'
+                                placeholder='Title'
+                                value={videoUploadForm.values.title} 
+                                onChange={videoUploadForm.handleChange} 
+                                onBlur={videoUploadForm.handleBlur} 
+                            />
+                            { videoUploadForm.errors.title && videoUploadForm.touched.title && <p className='error'>{videoUploadForm.errors.title}</p> }
+                            <input 
+                                type='text'
+                                name='description'
+                                placeholder='Description'
+                                value={videoUploadForm.values.description}
+                                onChange={videoUploadForm.handleChange}
+                                onBlur={videoUploadForm.handleBlur} 
+                            />
+                            { videoUploadForm.errors.description && videoUploadForm.touched.description && <p className='error'>{videoUploadForm.errors.description}</p> }
                             <Button mode='form' text='Submit' />
                         </div>
                     </Container>
                     : <Redirect to='/' />
             }
-        </>
+        </form>
     )
 };
 
