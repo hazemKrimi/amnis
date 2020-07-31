@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect } from 'react';
-import { reducer, SIGN_UP, LOG_IN, LOG_OUT, UPDATE_USER } from './reducers/userReducer';
+import { reducer, SIGN_UP, LOG_IN, LOG_OUT, UPDATE_USER, DELETE_USER } from './reducers/userReducer';
 import firebase from '../config/firebase';
 
 export const UserContext = createContext();
@@ -26,9 +26,6 @@ const UserContextProvider = ({ children }) => {
         try {
             const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
             user.updateProfile({ displayName: username });
-            await firebase.firestore().collection('users').doc(user.uid).set({
-                videos: []
-            });
             dispatch({ 
                 type: SIGN_UP,
                 payload: { 
@@ -74,7 +71,7 @@ const UserContextProvider = ({ children }) => {
             if (username) await firebase.auth().currentUser.updateProfile({ displayName: username });
             if (email) await firebase.auth().currentUser.updateEmail(email);
             if (avatar) {
-                const snapshot = await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}/avatar.png`).put(avatar);
+                const snapshot = await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).put(avatar);
                 const url = await snapshot.ref.getDownloadURL();
                 await firebase.auth().currentUser.updateProfile({ photoURL: url });
                 avatar = url;
@@ -94,8 +91,26 @@ const UserContextProvider = ({ children }) => {
         }
     }
 
+    const deleteAccount = async() => {
+        try {
+            await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
+            await firebase.auth().currentUser.delete();
+            dispatch({ type: DELETE_USER });
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    const reAuth = async(email, password) => {
+        try {
+            await firebase.auth().currentUser.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(email, password));
+        } catch (err) {
+            throw err;
+        }
+    }
+
     return (
-        <UserContext.Provider value={{ user, signUp, logIn, logOut, updateAccount }}>
+        <UserContext.Provider value={{ user, signUp, logIn, logOut, reAuth, updateAccount, deleteAccount }}>
             {children}
         </UserContext.Provider>
     )
