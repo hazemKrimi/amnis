@@ -129,19 +129,65 @@ const SignUp = ({ close }) => {
             <Form ref={ref} darkMode={darkMode} onSubmit={form.handleSubmit}>
                 <svg viewBox="0 0 20.828 20.828" onClick={() => close()}>
                     <g id="x" transform="translate(-4.586 -4.586)">
-                        <line x1="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                        <line x2="18" y2="18" transform="translate(6 6)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                        <line 
+                            x1="18"
+                            y2="18" 
+                            transform="translate(6 6)" 
+                            fill="none" 
+                            stroke={darkMode ? '#FFFFFF' : '#07070A'}
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth="2"
+                        />
+                        <line 
+                            x2="18" 
+                            y2="18" 
+                            transform="translate(6 6)" 
+                            fill="none" 
+                            stroke={darkMode ? '#FFFFFF' : '#07070A'} 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth="2"
+                        />
                     </g>
                 </svg>
                 <div>
                     <h2>Sign Up</h2>
-                    <input type="text" name='username' placeholder='Username' value={form.values.username} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    <input 
+                        type='text'
+                        name='username' 
+                        placeholder='Username' 
+                        value={form.values.username} 
+                        onChange={form.handleChange} 
+                        onBlur={form.handleBlur}
+                    />
                     { form.errors.username && form.touched.username && <p className='error'>{form.errors.username}</p> }
-                    <input type="email" name='email' placeholder='Email' value={form.values.email} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    <input 
+                        type='email' 
+                        name='email' 
+                        placeholder='Email' 
+                        value={form.values.email} 
+                        onChange={form.handleChange} 
+                        onBlur={form.handleBlur} 
+                    />
                     { form.errors.email && form.touched.email && <p className='error'>{form.errors.email}</p> }
-                    <input type="password" name='password' placeholder='Password' value={form.values.password} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    <input 
+                        type='password' 
+                        name='password' 
+                        placeholder='Password' 
+                        value={form.values.password} 
+                        onChange={form.handleChange} 
+                        onBlur={form.handleBlur} 
+                    />
                     { form.errors.password && form.touched.password && <p className='error'>{form.errors.password}</p> }
-                    <input type="password" name='confirmPassword' placeholder='Confirm Password' value={form.values.confirmPassword} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    <input 
+                        type='password' 
+                        name='confirmPassword' 
+                        placeholder='Confirm Password' 
+                        value={form.values.confirmPassword} 
+                        onChange={form.handleChange} 
+                        onBlur={form.handleBlur} 
+                    />
                     { form.errors.confirmPassword && form.touched.confirmPassword && <p className='error'>{form.errors.confirmPassword}</p> }
                     <Button text='Sign Up' mode='form' />
                     { form.errors.signup && <p className='error'>{form.errors.signup}</p> }

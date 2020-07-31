@@ -111,15 +111,92 @@ const Nav = () => {
                                 </svg>
                                 :
                                 <svg id="sun" viewBox="0 0 40 40" onClick={() => toggleDarkMode()}>
-                                    <circle cx="9" cy="9" r="9" transform="translate(11 11)" strokeWidth="2" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" />
-                                    <line y2="3" transform="translate(20 1)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line y2="3" transform="translate(20 36)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line x2="2.453" y2="2.453" transform="translate(6.562 6.562)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line x2="2.453" y2="2.453" transform="translate(30.985 30.985)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line x2="3" transform="translate(1 20)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line x2="3" transform="translate(36 20)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line y1="2.453" x2="2.453" transform="translate(6.562 30.985)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <line y1="2.453" x2="2.453" transform="translate(30.985 6.562)" fill="none" stroke="#07070A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                    <circle 
+                                        cx="9" 
+                                        cy="9" 
+                                        r="9" 
+                                        transform="translate(11 11)" 
+                                        strokeWidth="2" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round"
+                                    />
+                                    <line 
+                                        y2="3"
+                                        transform="translate(20 1)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
+                                    <line 
+                                        y2="3"
+                                        transform="translate(20 36)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
+                                    <line 
+                                        x2="2.453" 
+                                        y2="2.453" 
+                                        transform="translate(6.562 6.562)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
+                                    <line 
+                                        x2="2.453" 
+                                        y2="2.453" 
+                                        transform="translate(30.985 30.985)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
+                                    <line 
+                                        x2="3" 
+                                        transform="translate(1 20)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
+                                    <line 
+                                        x2="3" 
+                                        transform="translate(36 20)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
+                                    <line 
+                                        y1="2.453" 
+                                        x2="2.453" 
+                                        transform="translate(6.562 30.985)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
+                                    <line 
+                                        y1="2.453" 
+                                        x2="2.453" 
+                                        transform="translate(30.985 6.562)" 
+                                        fill="none" 
+                                        stroke="#07070A" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth="2"
+                                    />
                                 </svg>
                         }
                         {
@@ -128,9 +205,34 @@ const Nav = () => {
                                     <div id="create" ref={createRef} onClick={() => { setCreatePosition({ left: createRef.current.offsetLeft, top: createRef.current.offsetTop, width: createRef.current.offsetWidth, height: createRef.current.offsetHeight }); setCreate(true); setProfile(false); }}>
                                         <svg viewBox="0 0 34 34">
                                             <g id="plus-circle" transform="translate(-1 -1)">
-                                                <circle cx="16" cy="16" r="16" transform="translate(2 2)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                                <line y2="14" transform="translate(18 11)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                                <line x2="14" transform="translate(11 18)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                                <circle cx="16" 
+                                                    cy="16" 
+                                                    r="16" 
+                                                    transform="translate(2 2)" 
+                                                    strokeWidth="2" 
+                                                    stroke={darkMode ? '#FFFFFF' : '#07070A'} 
+                                                    strokeLinecap="round" 
+                                                    strokeLinejoin="round" 
+                                                    fill="none"
+                                                />
+                                                <line 
+                                                    y2="14" 
+                                                    transform="translate(18 11)" 
+                                                    fill="none" 
+                                                    stroke={darkMode ? '#FFFFFF' : '#07070A'} 
+                                                    strokeLinecap="round" 
+                                                    strokeLinejoin="round" 
+                                                    strokeWidth="2"
+                                                />
+                                                <line 
+                                                    x2="14" 
+                                                    transform="translate(11 18)" 
+                                                    fill="none" 
+                                                    stroke={darkMode ? '#FFFFFF' : '#07070A'} 
+                                                    strokeLinecap="round" 
+                                                    strokeLinejoin="round" 
+                                                    strokeWidth="2"
+                                                />
                                             </g>
                                         </svg>
                                     </div>

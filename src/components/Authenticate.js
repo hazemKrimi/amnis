@@ -104,9 +104,23 @@ const Authenticate = ({ close }) => {
                 <div style={{ height: '0.8rem' }}></div>
                 <div>
                     <h2>Authenticate</h2>
-                    <input type='email' name='email' placeholder='Email' value={form.values.email} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    <input 
+                        type='email' 
+                        name='email' 
+                        placeholder='Email' 
+                        value={form.values.email} 
+                        onChange={form.handleChange} 
+                        onBlur={form.handleBlur}
+                    />
                     {form.errors.email && form.touched.email && <p className='error'>{form.errors.email}</p>}
-                    <input type='password' name='password' placeholder='Password' value={form.values.password} onChange={form.handleChange} onBlur={form.handleBlur} />
+                    <input 
+                        type='password' 
+                        name='password' 
+                        placeholder='Password' 
+                        value={form.values.password} 
+                        onChange={form.handleChange} 
+                        onBlur={form.handleBlur}
+                    />
                     {form.errors.password && form.touched.password && <p className='error'>{form.errors.password}</p>}
                     <Button text='Proceed' mode='form' />
                     {form.errors.authenticate && <p className='error'>{form.errors.authenticate}</p>}

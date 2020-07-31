@@ -180,8 +180,27 @@ const Photo = ({ darkMode }) => {
                             { hovered ? <p className='hovered'>Upload</p> : (
                                 <svg viewBox="0 0 34 34">
                                     <g transform="translate(1 1.247)">
-                                        <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                        <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                        <path 
+                                            d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" 
+                                            transform="translate(-4 3.838)" 
+                                            fill="none" 
+                                            stroke={darkMode ? '#FFFFFF' : '#07070A'} 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round" 
+                                            strokeWidth="2"
+                                        />
+                                        <ellipse 
+                                            cx="8" 
+                                            cy="9" 
+                                            rx="8" 
+                                            ry="9" 
+                                            transform="translate(8 -0.247)" 
+                                            fill="none" 
+                                            stroke={darkMode ? '#FFFFFF' : '#07070A'} 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round" 
+                                            strokeWidth="2"
+                                        />
                                     </g>
                                 </svg>
                             ) }
@@ -192,7 +211,8 @@ const Photo = ({ darkMode }) => {
             <input 
                 type="file" 
                 accept='image/png, image/jpeg' 
-                name="avatar" id="avatar-upload" 
+                name='avatar'
+                id='avatar-upload' 
                 onChange={async event => {
                     try {
                         await updateAccount(null, null, event.target.files[0], null);
@@ -267,9 +287,23 @@ const Settings = () => {
                             <div id='form'>
                                 <Photo darkMode={darkMode} />
                                 <div id="inputs">
-                                    <input type="text" name='username' placeholder='Username' value={mainInfoForm.values.username} onChange={mainInfoForm.handleChange} onBlur={mainInfoForm.handleBlur} />
+                                    <input 
+                                        type='text'
+                                        name='username'
+                                        placeholder='Username'
+                                        value={mainInfoForm.values.username}
+                                        onChange={mainInfoForm.handleChange}
+                                        onBlur={mainInfoForm.handleBlur}
+                                    />
                                     { mainInfoForm.errors.username && mainInfoForm.touched.username && <p className='error'>{mainInfoForm.errors.username}</p> }
-                                    <input type="email" name='email' placeholder='Email' value={mainInfoForm.values.email} onChange={mainInfoForm.handleChange} onBlur={mainInfoForm.handleBlur} />
+                                    <input 
+                                        type='email' 
+                                        name='email' 
+                                        placeholder='Email' 
+                                        value={mainInfoForm.values.email} 
+                                        onChange={mainInfoForm.handleChange} 
+                                        onBlur={mainInfoForm.handleBlur} 
+                                    />
                                     { mainInfoForm.errors.email && mainInfoForm.touched.email && <p className='error'>{mainInfoForm.errors.email}</p> }
                                 </div>
                             </div>
@@ -278,9 +312,23 @@ const Settings = () => {
                         <form id="security" onSubmit={securityForm.handleSubmit}>
                             <h2>Security</h2>
                             <div id="form">
-                                <input type="password" name='newPassword' placeholder='New Password' value={securityForm.values.newPassword} onChange={securityForm.handleChange} onBlur={securityForm.handleBlur} />
+                                <input 
+                                    type='password'
+                                    name='newPassword' 
+                                    placeholder='New Password' 
+                                    value={securityForm.values.newPassword} 
+                                    onChange={securityForm.handleChange} 
+                                    onBlur={securityForm.handleBlur}
+                                />
                                 { securityForm.errors.newPassword && securityForm.touched.newPassword && <p className='error'>{securityForm.errors.newPassword}</p> }
-                                <input type="password" name='confirmNewPassword' placeholder='Confirm New Password' value={securityForm.values.confirmNewPassword} onChange={securityForm.handleChange} onBlur={securityForm.handleBlur} />
+                                <input 
+                                    type='password'
+                                    name='confirmNewPassword' 
+                                    placeholder='Confirm New Password' 
+                                    value={securityForm.values.confirmNewPassword} 
+                                    onChange={securityForm.handleChange} 
+                                    onBlur={securityForm.handleBlur}
+                                />
                                 { securityForm.errors.confirmNewPassword && securityForm.touched.confirmNewPassword && <p className='error'>{securityForm.errors.confirmNewPassword}</p> }
                             </div>
                             <Button mode='form' text='Save' />
