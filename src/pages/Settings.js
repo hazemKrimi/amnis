@@ -188,7 +188,18 @@ const Photo = ({ darkMode }) => {
                     )
                 }
             </div>
-            <input type="file" accept='image/png, image/jpeg' name="avatar" id="avatar-upload" onChange={async event => await updateAccount(null, null, event.target.files[0], null)} style={{ display: 'none' }} />
+            <input 
+                type="file" 
+                accept='image/png, image/jpeg' 
+                name="avatar" id="avatar-upload" 
+                onChange={async event => {
+                    try {
+                        await updateAccount(null, null, event.target.files[0], null);
+                    } catch(err) {
+                        alert('Error occured updating avatar');
+                    }
+                }}
+                style={{ display: 'none' }} />
         </label>
     );
 }
