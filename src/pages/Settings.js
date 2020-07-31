@@ -1,9 +1,10 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { MainContext } from '../contexts/MainContext';
 import { UserContext } from '../contexts/UserContext';
-import styled from 'styled-components';
 import { Redirect, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import Button from '../components/Button';
+import Authenticate from '../components/Authenticate';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -205,8 +206,9 @@ const Photo = ({ darkMode }) => {
 }
 
 const Settings = () => {
-    const { user, updateAccount } = useContext(UserContext);
+    const { user, updateAccount, deleteAccount } = useContext(UserContext);
     const { darkMode } = useContext(MainContext);
+    const [ reAuth, setReAuth ] = useState(true);
     const history = useHistory();
 
     const mainInfoForm = useFormik({
@@ -285,11 +287,19 @@ const Settings = () => {
                         </form>
                         <div id="danger-zone">
                             <h2>Danger Zone</h2>
-                            <Button mode='danger' text='Delete Account' />
+                            <Button mode='danger' text='Delete Account' onClick={async() => {
+                                try {
+                                    await deleteAccount();
+                                    history.push('/');
+                                } catch(err) {
+                                    alert('Error occured deleting account');
+                                }
+                            }} />
                         </div>
                     </Container>
                 : <Redirect to='/' />
             }
+            { reAuth && <Authenticate close={() => setReAuth(false)} /> }
         </>
     )
 };
