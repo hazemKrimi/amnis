@@ -23,7 +23,7 @@ const Form = styled.form`
     background: ${({ darkMode }) => darkMode ? '#24272B' : '#F3F4F9'};
     padding: 0.5rem 2rem 2rem 2rem;
 
-    @media (min-width: 1440px) {
+    @media (min-width: 1439px) {
         transform: scale(1.5);
     }
 
@@ -70,6 +70,8 @@ const Form = styled.form`
     .error {
         color: #FF4A4A;
         font-size: 0.8rem;
+        width: 35vw;
+        overflow-wrap: break-word;
     }
 `;
 
