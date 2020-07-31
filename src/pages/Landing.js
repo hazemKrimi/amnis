@@ -16,7 +16,6 @@ const Landing = () => {
         <Container>
             <h2>Live</h2>
             <h2>Recent Videos</h2>
-            <h2>Categories</h2>
         </Container>
     )
 };
