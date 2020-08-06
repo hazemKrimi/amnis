@@ -91,11 +91,7 @@ const Upload = () => {
             description: Yup.string().required('Description is required'),
             videoName: Yup.string().required('Video is required')
         }),
-        onSubmit: ({ title, description, video }) => {
-            console.log('Title: ', title);
-            console.log('Description: ', description);
-            console.log('Video: ', video);
-        }
+        onSubmit: ({ title, description, video }) => {}
     });
 
     return (
