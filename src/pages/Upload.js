@@ -30,7 +30,7 @@ const Container = styled.div`
         }
     }
 
-    #file-upload {
+    .file-upload {
         cursor: pointer;
         display: grid;
         justify-content: center;
@@ -84,14 +84,21 @@ const Upload = () => {
         initialValues: {
             title: '',
             description: '',
-            videoName: ''
+            videoName: '',
+            thumbnailName: ''
         },
         validationSchema: Yup.object().shape({
             title: Yup.string().required('Title is required'),
             description: Yup.string().required('Description is required'),
-            videoName: Yup.string().required('Video is required')
+            videoName: Yup.string().required('Video is required'),
+            thumbnailName: Yup.string().required('Thumbnail is required')
         }),
-        onSubmit: ({ title, description, video }) => {}
+        onSubmit: ({ title, description, video, thumbnail }) => {
+            console.log('Title: ', title);
+            console.log('Description: ', description);
+            console.log('Video: ', video);
+            console.log('Thumbnail: ', thumbnail);
+        }
     });
 
     return (
@@ -104,8 +111,8 @@ const Upload = () => {
                             <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
                         <label htmlFor="video">
-                            <div id='file-upload'>
-                                <h2>Upload video</h2>
+                            <div className='file-upload'>
+                                <h2>{videoUploadForm.values.videoName || 'Upload video'}</h2>
                                 <input 
                                     type='file' 
                                     accept='video/*' 
@@ -120,6 +127,23 @@ const Upload = () => {
                             </div>
                         </label>
                         { videoUploadForm.errors.videoName && videoUploadForm.touched.videoName && <p className='error'>{videoUploadForm.errors.videoName}</p> }
+                        <label htmlFor="thumbnail">
+                            <div className='file-upload'>
+                                <h2>{videoUploadForm.values.thumbnailName || 'Upload thumbnail'}</h2>
+                                <input
+                                    type='file'
+                                    accept='image/*'
+                                    name='thumbnail'
+                                    id='thumbnail'
+                                    style={{ display: 'none' }}
+                                    onChange={event => {
+                                        videoUploadForm.setFieldValue('thumbnail', event.target.files[0]);
+                                        videoUploadForm.setFieldValue('thumbnailName', event.target.files[0].name);
+                                    }}
+                                />
+                            </div>
+                        </label>
+                        { videoUploadForm.errors.thumbnailName && videoUploadForm.touched.thumbnailName && <p className='error'>{videoUploadForm.errors.thumbnailName}</p> }
                         <div id='inputs'>
                             <input 
                                 type='text'
