@@ -12,7 +12,7 @@ const Container = styled.div`
     margin: 3rem auto;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 1rem;
+    row-gap: 1.5rem;
 
     h2 {
         font-family: 'Poppins';
@@ -30,18 +30,26 @@ const Container = styled.div`
         }
     }
 
-    .file-upload {
-        cursor: pointer;
+    #files {
         display: grid;
+        grid-template-columns: repeat(2, 1fr);
         justify-content: center;
         align-items: center;
-        height: 15rem;
-        border: 3px dashed ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
+        column-gap: 2rem;
 
-        h2 {
-            font-family: 'Poppins';
-            font-size: 30;
+        .file-upload {
             cursor: pointer;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            height: 15rem;
+            border: 3px dashed ${({ darkMode }) => darkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(7, 7, 10, 1)'};
+
+            h2 {
+                font-family: 'Poppins';
+                font-size: 30;
+                cursor: pointer;
+            }
         }
     }
 
@@ -110,39 +118,41 @@ const Upload = () => {
                             <h2>Upload</h2>
                             <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
-                        <label htmlFor="video">
-                            <div className='file-upload'>
-                                <h2>{videoUploadForm.values.videoName || 'Upload video'}</h2>
-                                <input 
-                                    type='file' 
-                                    accept='video/*' 
-                                    name='video' 
-                                    id='video' 
-                                    style={{ display: 'none' }}
-                                    onChange={event => {
-                                        videoUploadForm.setFieldValue('video', event.target.files[0]);
-                                        videoUploadForm.setFieldValue('videoName', event.target.files[0].name);
-                                    }}
-                                />
-                            </div>
-                        </label>
-                        { videoUploadForm.errors.videoName && videoUploadForm.touched.videoName && <p className='error'>{videoUploadForm.errors.videoName}</p> }
-                        <label htmlFor="thumbnail">
-                            <div className='file-upload'>
-                                <h2>{videoUploadForm.values.thumbnailName || 'Upload thumbnail'}</h2>
-                                <input
-                                    type='file'
-                                    accept='image/*'
-                                    name='thumbnail'
-                                    id='thumbnail'
-                                    style={{ display: 'none' }}
-                                    onChange={event => {
-                                        videoUploadForm.setFieldValue('thumbnail', event.target.files[0]);
-                                        videoUploadForm.setFieldValue('thumbnailName', event.target.files[0].name);
-                                    }}
-                                />
-                            </div>
-                        </label>
+                        <div id="files">
+                            <label htmlFor="video">
+                                <div className='file-upload'>
+                                    <h2>{videoUploadForm.values.videoName || 'Upload video'}</h2>
+                                    <input
+                                        type='file'
+                                        accept='video/*'
+                                        name='video'
+                                        id='video'
+                                        style={{ display: 'none' }}
+                                        onChange={event => {
+                                            videoUploadForm.setFieldValue('video', event.target.files[0]);
+                                            videoUploadForm.setFieldValue('videoName', event.target.files[0].name);
+                                        }}
+                                    />
+                                </div>
+                            </label>
+                            {videoUploadForm.errors.videoName && videoUploadForm.touched.videoName && <p className='error'>{videoUploadForm.errors.videoName}</p>}
+                            <label htmlFor="thumbnail">
+                                <div className='file-upload'>
+                                    <h2>{videoUploadForm.values.thumbnailName || 'Upload thumbnail'}</h2>
+                                    <input
+                                        type='file'
+                                        accept='image/*'
+                                        name='thumbnail'
+                                        id='thumbnail'
+                                        style={{ display: 'none' }}
+                                        onChange={event => {
+                                            videoUploadForm.setFieldValue('thumbnail', event.target.files[0]);
+                                            videoUploadForm.setFieldValue('thumbnailName', event.target.files[0].name);
+                                        }}
+                                    />
+                                </div>
+                            </label>
+                        </div>
                         { videoUploadForm.errors.thumbnailName && videoUploadForm.touched.thumbnailName && <p className='error'>{videoUploadForm.errors.thumbnailName}</p> }
                         <div id='inputs'>
                             <input 
