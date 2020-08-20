@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect, useState } from 'react';
 import { reducer, SIGN_UP, LOG_IN, LOG_OUT, UPDATE_USER, DELETE_USER } from './reducers/userReducer';
 import firebase from '../config/firebase';
 
@@ -8,19 +8,29 @@ const UserContextProvider = ({ children }) => {
     const [{ user }, dispatch] = useReducer(reducer, {
         user: null
     });
+    const [ initialLoading, setInitialLoading ] = useState(false);
 
-    useEffect(() => firebase.auth().onAuthStateChanged(user => {
-        if (user) dispatch({
-            type: LOG_IN,
-            payload: {
-                displayName: user.providerData[0].displayName,
-                email: user.providerData[0].email,
-                photoURL: user.providerData[0].photoURL,
-                uid: user.providerData[0].uid
+    useEffect(() => {
+        setInitialLoading(true);
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                dispatch({
+                    type: LOG_IN,
+                    payload: {
+                        displayName: user.providerData[0].displayName,
+                        email: user.providerData[0].email,
+                        photoURL: user.providerData[0].photoURL,
+                        uid: user.providerData[0].uid
+                    }
+                });
+                setInitialLoading(false);
             }
-        });
-        else dispatch({ type: LOG_OUT });
-    }), []);
+            else {
+                dispatch({ type: LOG_OUT });
+                setInitialLoading(false);
+            }
+        })
+    }, []);
 
     const signUp = async(username, email, password) => {
         try {
@@ -110,7 +120,7 @@ const UserContextProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ user, signUp, logIn, logOut, reAuth, updateAccount, deleteAccount }}>
+        <UserContext.Provider value={{ initialLoading, user, signUp, logIn, logOut, reAuth, updateAccount, deleteAccount }}>
             {children}
         </UserContext.Provider>
     )
