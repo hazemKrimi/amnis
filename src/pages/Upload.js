@@ -85,7 +85,7 @@ const Container = styled.div`
 
 const Upload = () => {
     const { user } = useContext(UserContext);
-    const { darkMode } = useContext(MainContext);
+    const { darkMode, addVideo } = useContext(MainContext);
     const history = useHistory();
 
     const videoUploadForm = useFormik({
@@ -101,11 +101,13 @@ const Upload = () => {
             videoName: Yup.string().required('Video is required'),
             thumbnailName: Yup.string().required('Thumbnail is required')
         }),
-        onSubmit: ({ title, description, video, thumbnail }) => {
-            console.log('Title: ', title);
-            console.log('Description: ', description);
-            console.log('Video: ', video);
-            console.log('Thumbnail: ', thumbnail);
+        onSubmit: async({ title, description, video, thumbnail }, { setFieldError }) => {
+            try {
+                await addVideo(title, description, video, thumbnail);
+                alert('Video uploaded successfully');
+            } catch(err) {
+                setFieldError('upload', err.message);
+            }
         }
     });
 
@@ -174,6 +176,7 @@ const Upload = () => {
                             />
                             { videoUploadForm.errors.description && videoUploadForm.touched.description && <p className='error'>{videoUploadForm.errors.description}</p> }
                             <Button mode='form' text='Submit' />
+                            { videoUploadForm.errors.upload && <p className='error'>{videoUploadForm.errors.upload}</p> }
                         </div>
                     </Container>
                     : <Redirect to='/' />
