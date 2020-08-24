@@ -5,6 +5,9 @@ const Btn = styled.button`
     cursor: pointer;
     border: none;
     box-sizing: border-box;
+    display: grid;
+    justify-content: center;
+    align-items: center;
     color: ${({ mode }) => mode === 'action' || mode === 'form' ? '#FFFFFF' : mode === 'danger' ? '#FF4A4A' : 'inherit'};
     background: ${({ mode }) => mode === 'action' || mode === 'form' ? '#FF4A4A' : 'none'};
     font-weight: ${({ mode }) => mode === 'action' || mode === 'form' ? '400' : '600'};
