@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { MainContext } from '../contexts/MainContext';
 import { UserContext } from '../contexts/UserContext';
 import styled from 'styled-components';
 import { Redirect, useHistory } from 'react-router-dom';
 import Button from '../components/Button';
+import Alert from '../components/Alert';
+import InlineLoader from '../components/InlineLoader';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -86,6 +88,8 @@ const Container = styled.div`
 const Upload = () => {
     const { user } = useContext(UserContext);
     const { darkMode, addVideo } = useContext(MainContext);
+    const [ loading, setLoading ] = useState(false);
+    const [ alert, setAlert ] = useState(null);
     const history = useHistory();
 
     const videoUploadForm = useFormik({
@@ -101,12 +105,19 @@ const Upload = () => {
             videoName: Yup.string().required('Video is required'),
             thumbnailName: Yup.string().required('Thumbnail is required')
         }),
-        onSubmit: async({ title, description, video, thumbnail }, { setFieldError }) => {
+        onSubmit: async({ title, description, video, thumbnail }) => {
             try {
+                setLoading(true);
                 await addVideo(title, description, video, thumbnail);
-                alert('Video uploaded successfully');
+                setLoading(false);
+                setAlert({ type: 'success', text: 'Video uploaded successfully' });
+                setTimeout(() => setAlert(null), 5000);
             } catch(err) {
-                setFieldError('upload', err.message);
+                setLoading(false);
+                setAlert({ type: 'failure', text: 'Error occured! Try again later' });
+                setTimeout(() => setAlert(null), 5000);
+            } finally {
+                videoUploadForm.resetForm();
             }
         }
     });
@@ -120,6 +131,7 @@ const Upload = () => {
                             <h2>Upload</h2>
                             <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
+                        { alert && <Alert type={alert.type} text={alert.text} /> }
                         <div id="files">
                             <label htmlFor="video">
                                 <div className='file-upload'>
@@ -131,8 +143,10 @@ const Upload = () => {
                                         id='video'
                                         style={{ display: 'none' }}
                                         onChange={event => {
-                                            videoUploadForm.setFieldValue('video', event.target.files[0]);
-                                            videoUploadForm.setFieldValue('videoName', event.target.files[0].name);
+                                            if (event.target.files) {
+                                                videoUploadForm.setFieldValue('video', event.target.files[0]);
+                                                videoUploadForm.setFieldValue('videoName', event.target.files[0].name);
+                                            }
                                         }}
                                     />
                                 </div>
@@ -148,8 +162,10 @@ const Upload = () => {
                                         id='thumbnail'
                                         style={{ display: 'none' }}
                                         onChange={event => {
-                                            videoUploadForm.setFieldValue('thumbnail', event.target.files[0]);
-                                            videoUploadForm.setFieldValue('thumbnailName', event.target.files[0].name);
+                                            if (event.target.files) {
+                                                videoUploadForm.setFieldValue('thumbnail', event.target.files[0]);
+                                                videoUploadForm.setFieldValue('thumbnailName', event.target.files[0].name);
+                                            }
                                         }}
                                     />
                                 </div>
@@ -175,8 +191,7 @@ const Upload = () => {
                                 onBlur={videoUploadForm.handleBlur} 
                             />
                             { videoUploadForm.errors.description && videoUploadForm.touched.description && <p className='error'>{videoUploadForm.errors.description}</p> }
-                            <Button mode='form' text='Submit' />
-                            { videoUploadForm.errors.upload && <p className='error'>{videoUploadForm.errors.upload}</p> }
+                            <Button mode='form' text={loading ? <InlineLoader /> : 'Submit'} />
                         </div>
                     </Container>
                     : <Redirect to='/' />
