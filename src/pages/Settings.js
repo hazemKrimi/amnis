@@ -5,6 +5,8 @@ import { Redirect, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Authenticate from '../components/Authenticate';
+import Alert from '../components/Alert';
+import InlineLoader from '../components/InlineLoader';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -150,7 +152,7 @@ const Container = styled.div`
     }
 `;
 
-const Photo = ({ darkMode }) => {
+const Photo = ({ darkMode, setAlert }) => {
     const { user, updateAccount } = useContext(UserContext);
     const [ hovered, setHovered ] = useState(false);
     const ref = useRef();
@@ -215,9 +217,10 @@ const Photo = ({ darkMode }) => {
                 id='avatar-upload' 
                 onChange={async event => {
                     try {
-                        await updateAccount(null, null, event.target.files[0], null);
+                        if (event.target.files) await updateAccount(null, null, event.target.files[0], null);
                     } catch(err) {
-                        alert('Error occured updating avatar');
+                        setAlert({ type: 'failure', text: 'Error occured! Try again later' });
+                        setTimeout(() => setAlert(null), 5000);
                     }
                 }}
                 style={{ display: 'none' }} />
@@ -229,6 +232,9 @@ const Settings = () => {
     const { user, updateAccount, deleteAccount } = useContext(UserContext);
     const { darkMode } = useContext(MainContext);
     const [ reAuth, setReAuth ] = useState(true);
+    const [ mainInfoLoading, setMainInfoLoading ] = useState(false);
+    const [ securityLoading, setSecurityLoading ] = useState(false);
+    const [ alert, setAlert ] = useState(null);
     const history = useHistory();
 
     const mainInfoForm = useFormik({
@@ -242,11 +248,16 @@ const Settings = () => {
         }),
         onSubmit: async({ username, email }) => {
             try {
+                setMainInfoLoading(true);
                 await updateAccount(username, email, null, null);
-                alert('Main info updated successfully');
-                mainInfoForm.resetForm();
+                setMainInfoLoading(false);
+                setAlert({ type: 'success', text: 'Main info updated successfully' });
+                setTimeout(() => setAlert(null), 5000);
             } catch(err) {
-                alert('Error occured updating main info');
+                setMainInfoLoading(false);
+                setAlert({ type: 'failure', text: 'Error occured! Try again later' });
+                setTimeout(() => setAlert(null), 5000);
+            } finally {
                 mainInfoForm.resetForm();
             }
         }
@@ -263,11 +274,16 @@ const Settings = () => {
         }),
         onSubmit: async({ password }) => {
             try {
+                setSecurityLoading(true);
                 await updateAccount(null, null, null, password);
-                alert('Password updated successfully');
-                securityForm.resetForm();
+                setSecurityLoading(false);
+                setAlert({ type: 'success', text: 'Password updated successfully' });
+                setTimeout(() => setAlert(null), 5000);
             } catch(err) {
-                alert('Error occured updating password');
+                setSecurityLoading(false);
+                setAlert({ type: 'failure', text: 'Error occured! Try again later' });
+                setTimeout(() => setAlert(null), 5000);
+            } finally {
                 securityForm.resetForm();
             }
         }
@@ -282,10 +298,11 @@ const Settings = () => {
                             <h2>Settings</h2>
                             <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
+                        { alert && <Alert type={alert.type} text={alert.text} /> }
                         <form id="main-info" onSubmit={mainInfoForm.handleSubmit}>
                             <h2>Main Info</h2>
                             <div id='form'>
-                                <Photo darkMode={darkMode} />
+                                <Photo darkMode={darkMode} setAlert={setAlert} />
                                 <div id="inputs">
                                     <input 
                                         type='text'
@@ -307,7 +324,7 @@ const Settings = () => {
                                     { mainInfoForm.errors.email && mainInfoForm.touched.email && <p className='error'>{mainInfoForm.errors.email}</p> }
                                 </div>
                             </div>
-                            <Button mode='form' text='Save' />
+                            <Button mode='form' text={mainInfoLoading ? <InlineLoader /> : 'Save'} />
                         </form>
                         <form id="security" onSubmit={securityForm.handleSubmit}>
                             <h2>Security</h2>
@@ -331,7 +348,7 @@ const Settings = () => {
                                 />
                                 { securityForm.errors.confirmNewPassword && securityForm.touched.confirmNewPassword && <p className='error'>{securityForm.errors.confirmNewPassword}</p> }
                             </div>
-                            <Button mode='form' text='Save' />
+                            <Button mode='form' text={securityLoading ? <InlineLoader /> : 'Save'} />
                         </form>
                         <div id="danger-zone">
                             <h2>Danger Zone</h2>
