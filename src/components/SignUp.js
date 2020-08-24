@@ -1,8 +1,9 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
 import { UserContext } from '../contexts/UserContext';
 import Button from './Button';
+import InlineLoader from './InlineLoader';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
@@ -78,6 +79,7 @@ const Form = styled.form`
 const SignUp = ({ close }) => {
     const { darkMode } = useContext(MainContext);
     const { signUp } = useContext(UserContext);
+    const [ loading, setLoading ] = useState(false);
     const ref = useRef();
     const history = useHistory();
 
@@ -96,11 +98,16 @@ const SignUp = ({ close }) => {
         }),
         onSubmit: async({ username, email, password }, { setFieldError }) => {
             try {
+                setLoading(true);
                 await signUp(username, email, password);
+                setLoading(false);
                 close();
                 history.push('/');
             } catch(err) {
+                setLoading(false);
                 setFieldError('signup', err.message);
+            } finally {
+                form.resetForm();
             }
         }
     });
@@ -189,7 +196,7 @@ const SignUp = ({ close }) => {
                         onBlur={form.handleBlur} 
                     />
                     { form.errors.confirmPassword && form.touched.confirmPassword && <p className='error'>{form.errors.confirmPassword}</p> }
-                    <Button text='Sign Up' mode='form' />
+                    <Button text={loading ? <InlineLoader /> : 'Sign Up'} mode='form' />
                     { form.errors.signup && <p className='error'>{form.errors.signup}</p> }
                 </div>
             </Form>
