@@ -217,7 +217,7 @@ const Photo = ({ darkMode, setAlert }) => {
                 id='avatar-upload' 
                 onChange={async event => {
                     try {
-                        if (event.target.files) await updateAccount(null, null, event.target.files[0], null);
+                        if (event.target.files[0]) await updateAccount(null, null, event.target.files[0], null);
                     } catch(err) {
                         setAlert({ type: 'failure', text: 'Error occured! Try again later' });
                         setTimeout(() => setAlert(null), 5000);

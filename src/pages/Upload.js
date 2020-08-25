@@ -143,7 +143,7 @@ const Upload = () => {
                                         id='video'
                                         style={{ display: 'none' }}
                                         onChange={event => {
-                                            if (event.target.files) {
+                                            if (event.target.files[0]) {
                                                 videoUploadForm.setFieldValue('video', event.target.files[0]);
                                                 videoUploadForm.setFieldValue('videoName', event.target.files[0].name);
                                             }
@@ -162,7 +162,7 @@ const Upload = () => {
                                         id='thumbnail'
                                         style={{ display: 'none' }}
                                         onChange={event => {
-                                            if (event.target.files) {
+                                            if (event.target.files[0]) {
                                                 videoUploadForm.setFieldValue('thumbnail', event.target.files[0]);
                                                 videoUploadForm.setFieldValue('thumbnailName', event.target.files[0].name);
                                             }
