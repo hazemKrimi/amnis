@@ -1,14 +1,15 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
-import { reducer, TOGGLE_DARK_MODE, SET_OFFLINE, SET_ONLINE } from './reducers/mainReducer';
+import { reducer, TOGGLE_DARK_MODE, SET_OFFLINE, SET_ONLINE, GET_VIDEOS } from './reducers/mainReducer';
 import firebase from '../config/firebase';
 import { UserContext } from './UserContext';
 
 export const MainContext = createContext();
 
 const MainContextProvider = ({ children }) => {
-    const [{ darkMode, offline, showSignUp, showLogIn }, dispatch] = useReducer(reducer, {
+    const [{ darkMode, offline, showSignUp, showLogIn, videos }, dispatch] = useReducer(reducer, {
         darkMode: false, 
-        offline: false
+        offline: false,
+        videos: []
     });
     const { user } = useContext(UserContext);
 
@@ -20,6 +21,17 @@ const MainContextProvider = ({ children }) => {
     }, []);
     
     const toggleDarkMode = () => dispatch({ type: TOGGLE_DARK_MODE });
+
+    const getVideos = async() => {
+        try {
+            const videosSnapshot = await firebase.firestore().collection('videos').get();
+            const videosPayload = [];
+            videosSnapshot.forEach(video => videosPayload.push(video.data()));
+            dispatch({ type: GET_VIDEOS, payload: videosPayload });
+        } catch(err) {
+            throw err;
+        }
+    };
 
     const addVideo = async(title, description, video, thumbnail) => {
         try {
@@ -41,7 +53,7 @@ const MainContextProvider = ({ children }) => {
     };
     
     return (
-        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, addVideo, toggleDarkMode }}>
+        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, getVideos, addVideo }}>
             { children }
         </MainContext.Provider>
     )
