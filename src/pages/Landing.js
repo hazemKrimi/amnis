@@ -127,7 +127,7 @@ const Landing = () => {
                         <div className="videos">
                             {
                                 videos.map(video => (
-                                    <div className="video">
+                                    <div className="video" key={video.id}>
                                         <img src={video.thumbnail} alt='Video thumbnail' className="thumbnail" />
                                         <div className="views">
                                             <p>{video.views}</p>
