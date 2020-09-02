@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 
 const Overlay = styled.div`
     position: fixed;
+    z-index: 2;
     top: 0;
     left: 0;
     width: 100%;
@@ -21,6 +22,8 @@ const Overlay = styled.div`
 `;
 
 const Form = styled.form`
+    position: relative;
+    z-index: 3;
     background: ${({ darkMode }) => darkMode ? '#24272B' : '#F3F4F9'};
     padding: 0.5rem 2rem 2rem 2rem;
 
