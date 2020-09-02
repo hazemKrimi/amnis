@@ -12,6 +12,7 @@ const StyledMenu = styled.div`
     row-gap: 1rem;
     align-items: center;
     position: absolute;
+    z-index: 2;
     top: ${({ position }) => position.top + position.height}px;
     right: ${({ position }) => window.innerWidth - position.left - position.width}px;
 
