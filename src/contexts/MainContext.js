@@ -26,7 +26,7 @@ const MainContextProvider = ({ children }) => {
         try {
             const videosSnapshot = await firebase.firestore().collection('videos').get();
             const videosPayload = [];
-            videosSnapshot.forEach(video => videosPayload.push(video.data()));
+            videosSnapshot.forEach(video => videosPayload.push({ ...video.data(), id: video.id }));
             dispatch({ type: GET_VIDEOS, payload: videosPayload });
         } catch(err) {
             throw err;
