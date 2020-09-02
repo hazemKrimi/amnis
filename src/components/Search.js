@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
+import { useFormik } from 'formik';
 
-const SearchBar = styled.div`
+const SearchBar = styled.form`
     display: grid;
     grid-template-columns: 1fr auto;
     background-color: ${({ darkMode }) => darkMode ? 'rgba(7, 7, 10, 0.5)' : 'rgba(243, 244, 249, 0.5)'};
@@ -36,10 +37,32 @@ const SearchBar = styled.div`
 const Search = () => {
     const { darkMode } = useContext(MainContext);
 
+    const form = useFormik({
+        initialValues: {
+            query: ''
+        },
+        onSubmit: async({ query }) => {
+            try {
+                console.log(query);
+            } catch(err) {
+                console.log(err)
+            } finally {
+                form.resetForm();
+            }
+        }
+    });
+
     return (
-        <SearchBar darkMode={darkMode}>
-            <input type="text" placeholder='Search'/>
-            <div className='search-button'>
+        <SearchBar darkMode={darkMode} onSubmit={form.handleSubmit}>
+            <input 
+                type='text' 
+                name='query' 
+                placeholder='Search'
+                value={form.query}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+            />
+            <div className='search-button' onClick={form.handleSubmit}>
                 <svg viewBox="0 0 32 32">
                     <path 
                         d="M31.8,29.919l-9.3-9.3a12.692,12.692,0,1,0-1.885,1.885l9.3,9.3a.667.667,0,0,0,.943,0l.943-.943A.667.667,0,0,0,31.8,29.919ZM12.667,22.667a10,10,0,1,1,10-10A10.011,10.011,0,0,1,12.667,22.667Z"
