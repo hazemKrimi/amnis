@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
-import { reducer, TOGGLE_DARK_MODE, SET_OFFLINE, SET_ONLINE, GET_VIDEOS } from './reducers/mainReducer';
+import { reducer, TOGGLE_DARK_MODE, SET_OFFLINE, SET_ONLINE, GET_VIDEOS, SEARCH } from './reducers/mainReducer';
 import firebase from '../config/firebase';
 import { UserContext } from './UserContext';
 
@@ -33,6 +33,17 @@ const MainContextProvider = ({ children }) => {
         }
     };
 
+    const search = async query => {
+        try {
+            const videosSnapshot = await firebase.firestore().collection('videos').where('title', '==', query).get();
+            const videosPayload = [];
+            videosSnapshot.forEach(video => videosPayload.push({ ...video.data(), id: video.id }));
+            dispatch({ type: SEARCH, payload: videosPayload });
+        } catch(err) {
+            throw err;
+        }
+    }
+
     const addVideo = async(title, description, video, thumbnail) => {
         try {
             const videoRef = await firebase.firestore().collection('videos').add({ 
@@ -53,7 +64,7 @@ const MainContextProvider = ({ children }) => {
     };
     
     return (
-        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, getVideos, addVideo }}>
+        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, getVideos, search, addVideo }}>
             { children }
         </MainContext.Provider>
     )
