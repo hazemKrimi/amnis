@@ -10,7 +10,7 @@ export const reducer = (state, { type, payload }) => {
         case SET_OFFLINE: return { ...state, offline: true };
         case SET_ONLINE: return { ...state, offline: false };
         case GET_VIDEOS: return { ...state, videos: payload };
-        case SEARCH: return { ...state, videos: payload };
+        case SEARCH: return { ...state, searchResults: payload };
         default: return state;
     }
 }
