@@ -9,6 +9,7 @@ const Nav = lazy(() => import('./components/Nav'));
 const Landing = lazy(() => import('./pages/Landing'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Upload = lazy(() => import('./pages/Upload'));
+const Search = lazy(() => import('./pages/Search'));
 
 const App = () => {
   const { initialLoading } = useContext(UserContext);
@@ -32,6 +33,9 @@ const App = () => {
                 </Route>
                 <Route path='/upload' exact>
                   <Upload />
+                </Route>
+                <Route path='/search/:query' exact>
+                  <Search />
                 </Route>
               </Switch>
             </Suspense>
