@@ -6,10 +6,11 @@ import { UserContext } from './UserContext';
 export const MainContext = createContext();
 
 const MainContextProvider = ({ children }) => {
-    const [{ darkMode, offline, showSignUp, showLogIn, videos }, dispatch] = useReducer(reducer, {
+    const [{ darkMode, offline, showSignUp, showLogIn, videos, searchResults }, dispatch] = useReducer(reducer, {
         darkMode: false, 
         offline: false,
-        videos: []
+        videos: [],
+        searchResults: []
     });
     const { user } = useContext(UserContext);
 
@@ -64,7 +65,7 @@ const MainContextProvider = ({ children }) => {
     };
     
     return (
-        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, getVideos, search, addVideo }}>
+        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, searchResults, getVideos, search, addVideo }}>
             { children }
         </MainContext.Provider>
     )
