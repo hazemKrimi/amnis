@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { MainContext } from '../contexts/MainContext';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 
 const SearchBar = styled.form`
@@ -36,6 +37,7 @@ const SearchBar = styled.form`
 
 const Search = () => {
     const { darkMode } = useContext(MainContext);
+    const history = useHistory();
 
     const form = useFormik({
         initialValues: {
@@ -43,9 +45,10 @@ const Search = () => {
         },
         onSubmit: async({ query }) => {
             try {
-                console.log(query);
+                history.push('/');
+                history.push(`/search/${query}`);
             } catch(err) {
-                console.log(err)
+                console.log(err);
             } finally {
                 form.resetForm();
             }
