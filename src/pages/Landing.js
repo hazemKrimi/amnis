@@ -27,33 +27,11 @@ const Container = styled.div`
             grid-template-columns: 1fr;
             justify-content: center;
             align-items: center;
+            row-gap: 0.5rem;
 
             .thumbnail {
                 width: 100%;
                 height: 200px;
-            }
-
-            .views {
-                position: relative;
-                top: -195px;
-                right: -85%;
-                background: rgba(0, 0, 0, 0.5);
-                color: #FFFFFF;
-                width: 50px;
-                display: grid;
-                grid-template-columns: repeat(2, auto);
-                justify-content: center;
-                align-items: center;
-                column-gap: 0.5rem;
-
-                .eye {
-                    width: 1rem;
-                    height: 1rem;
-                }
-
-                p {
-                    color: #FFFFFF;
-                }
             }
 
             .info {
@@ -90,7 +68,25 @@ const Container = styled.div`
                     grid-template-columns: 1fr;
                     justify-content: center;
                     align-items: center;
-                    row-gap: 0.5rem;
+                    row-gap: 0.1rem;
+
+                    .views {
+                        color: #FFFFFF;
+                        display: grid;
+                        grid-template-columns: repeat(2, auto);
+                        justify-content: flex-start;
+                        align-items: center;
+                        column-gap: 0.5rem;
+
+                        .eye {
+                            width: 1rem;
+                            height: 1rem;
+                        }
+
+                        p {
+                            color: ${({ darkMode }) => darkMode ? '#FFFFFF' : '#07070A'};
+                        }
+                    }
                 }
             }
         }
@@ -118,7 +114,7 @@ const Landing = () => {
     }, []);
 
     return !loading ? (
-        <Container>
+        <Container darkMode={darkMode}>
             { alert && <Alert type={alert.type} text={alert.text} /> }
             {
                 videos.length > 0 ? (
@@ -129,15 +125,6 @@ const Landing = () => {
                                 videos.map(video => (
                                     <div className="video" key={video.id}>
                                         <img src={video.thumbnail} alt='Video thumbnail' className="thumbnail" />
-                                        <div className="views">
-                                            <p>{video.views}</p>
-                                            <svg className='eye' viewBox="0 0 26.292 19.667">
-                                                <g transform="translate(0 -3)">
-                                                    <path d="M1,12.833S5.417,4,13.146,4s12.146,8.833,12.146,8.833-4.417,8.833-12.146,8.833S1,12.833,1,12.833Z" fill="none" stroke='#FFFFFF' strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                                    <circle cx="3.5" cy="3.5" r="3.5" transform="translate(10 9)" strokeWidth="2" stroke='#FFFFFF' strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                                                </g>
-                                            </svg>
-                                        </div>
                                         <div className="info">
                                             <div className="profile">
                                                 {
@@ -156,6 +143,15 @@ const Landing = () => {
                                             <div className="meta">
                                                 <h3>{video.title}</h3>
                                                 <h5>{video.user.displayName}</h5>
+                                                <div className="views">
+                                                    <svg className='eye' viewBox="0 0 26.292 19.667">
+                                                        <g transform="translate(0 -3)">
+                                                            <path d="M1,12.833S5.417,4,13.146,4s12.146,8.833,12.146,8.833-4.417,8.833-12.146,8.833S1,12.833,1,12.833Z" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                                            <circle cx="3.5" cy="3.5" r="3.5" transform="translate(10 9)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                                                        </g>
+                                                    </svg>
+                                                    <p>{video.views}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
