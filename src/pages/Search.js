@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { MainContext } from '../contexts/MainContext';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Alert from '../components/Alert';
 import Loader from '../components/Loader';
@@ -23,7 +23,6 @@ const Container = styled.div`
         grid-gap: 2rem;
 
         .video {
-            cursor: pointer;
             display: grid;
             grid-template-columns: 1fr;
             justify-content: center;
@@ -31,6 +30,7 @@ const Container = styled.div`
             row-gap: 0.5rem;
 
             .thumbnail {
+                cursor: pointer;
                 width: 100%;
                 height: 200px;
             }
@@ -43,7 +43,6 @@ const Container = styled.div`
                 column-gap: 1rem;
 
                 .profile {
-                    cursor: pointer;
                     width: 2.5rem;
                     height: 2.5rem;
                     border-radius: 50%;
@@ -70,6 +69,10 @@ const Container = styled.div`
                     justify-content: center;
                     align-items: center;
                     row-gap: 0.1rem;
+
+                    h3 {
+                        cursor: pointer;
+                    }
 
                     .views {
                         color: #FFFFFF;
@@ -99,6 +102,7 @@ const Search = () => {
     const [ alert, setAlert ] = useState(null);
     const [ loading, setLoading ] = useState(false);
     const { query } = useParams();
+    const history = useHistory();
 
     useEffect(() => {
         (async() => {
@@ -126,7 +130,12 @@ const Search = () => {
                             {
                                 searchResults.map(video => (
                                     <div className="video" key={video.id}>
-                                        <img src={video.thumbnail} alt='Video thumbnail' className="thumbnail" />
+                                        <img
+                                            src={video.thumbnail}
+                                            alt='Video thumbnail'
+                                            className='thumbnail'
+                                            onClick={() => history.push(`video/${video.id}`)}
+                                        />
                                         <div className="info">
                                             <div className="profile">
                                                 {
@@ -143,7 +152,9 @@ const Search = () => {
                                                 }
                                             </div>
                                             <div className="meta">
-                                                <h3>{video.title}</h3>
+                                                <h3 onClick={() => history.push(`video/${video.id}`)}>
+                                                    {video.title}
+                                                </h3>
                                                 <h5>{video.user.displayName}</h5>
                                                 <div className="views">
                                                     <svg className='eye' viewBox="0 0 26.292 19.667">
