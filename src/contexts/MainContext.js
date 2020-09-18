@@ -34,6 +34,15 @@ const MainContextProvider = ({ children }) => {
         }
     };
 
+    const getVideo = async id => {
+        try {
+            const video = await firebase.firestore().collection('videos').doc(id).get();
+            return { ...video.data(), id: video.id };
+        } catch (err) {
+            throw err;
+        }
+    };
+
     const search = async query => {
         try {
             const videosSnapshot = await firebase.firestore().collection('videos').where('title', '==', query).get();
@@ -58,14 +67,14 @@ const MainContextProvider = ({ children }) => {
             const videoUrl = await videoSnapshot.ref.getDownloadURL();
             const thumbnailSnapshot = await firebase.storage().ref(`thumbnails/${videoRef.id}.png`).put(thumbnail);
             const thumbnailoUrl = await thumbnailSnapshot.ref.getDownloadURL();
-            await videoRef.update({ video: videoUrl, thumbnail: thumbnailoUrl });
+            await videoRef.update({ source: videoUrl, thumbnail: thumbnailoUrl });
         } catch(err) {
             throw err;
         }
     };
     
     return (
-        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, searchResults, getVideos, search, addVideo }}>
+        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, searchResults, getVideos, getVideo, search, addVideo }}>
             { children }
         </MainContext.Provider>
     )
