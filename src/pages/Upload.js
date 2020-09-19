@@ -16,7 +16,7 @@ const Container = styled.div`
     grid-template-columns: 1fr;
     row-gap: 1.5rem;
 
-    h2 {
+    h1 {
         font-family: 'Poppins';
         font-size: 40;
     }
@@ -128,7 +128,7 @@ const Upload = () => {
                 user ?
                     <Container darkMode={darkMode}>
                         <div id='section-header'>
-                            <h2>Upload</h2>
+                            <h1>Upload</h1>
                             <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
                         { alert && <Alert type={alert.type} text={alert.text} /> }

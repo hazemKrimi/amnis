@@ -9,7 +9,7 @@ const Container = styled.div`
     width: 90%;
     margin: 3rem auto;
 
-    h2 {
+    h1 {
         font-family: 'Poppins';
         font-size: 40;
     }
@@ -125,7 +125,7 @@ const Search = () => {
             {
                 searchResults.length > 0 ? (
                     <>
-                        <h2>Results for {query}</h2>
+                        <h1>Results for: <span>{query}</span></h1>
                         <div className="videos">
                             {
                                 searchResults.map(video => (
@@ -173,7 +173,7 @@ const Search = () => {
                         </div>
                     </>
                 ) : (
-                    <h2>No Videos Found</h2>
+                    <h1>No Videos Found</h1>
                 )
             }
         </Container>

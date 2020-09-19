@@ -9,7 +9,7 @@ const Container = styled.div`
     width: 90%;
     margin: 3rem auto;
 
-    h2 {
+    h1 {
         font-family: 'Poppins';
         font-size: 40;
     }
@@ -124,7 +124,7 @@ const Landing = () => {
             {
                 videos.length > 0 ? (
                     <>
-                        <h2>Recent Videos</h2>
+                        <h1>Recent Videos</h1>
                         <div className="videos">
                             {
                                 videos.map(video => (
@@ -172,7 +172,7 @@ const Landing = () => {
                         </div>
                     </>
                 ) : (
-                    <h2>No Videos Available</h2>
+                    <h1>No Videos Available</h1>
                 )
             }
         </Container>

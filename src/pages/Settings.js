@@ -17,9 +17,14 @@ const Container = styled.div`
     grid-template-columns: 1fr;
     row-gap: 2rem;
 
-    h2 {
+    h1 {
         font-family: 'Poppins';
         font-size: 40;
+    }
+
+    h2 {
+        font-family: 'Poppins';
+        font-size: 30;
     }
 
     #section-header {
@@ -295,7 +300,7 @@ const Settings = () => {
                 user ?
                     <Container darkMode={darkMode}>
                         <div id='section-header'>
-                            <h2>Settings</h2>
+                            <h1>Settings</h1>
                             <Button text='Cancel' onClick={() => history.push('/')} />
                         </div>
                         { alert && <Alert type={alert.type} text={alert.text} /> }
