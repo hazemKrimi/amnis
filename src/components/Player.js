@@ -102,12 +102,20 @@ const VideoContainer = styled.div`
             }
         }
 
+        .vjs-volume-level:before {
+            color: rgba(255, 255, 255, 1);
+        }
+
         .vjs-progress-control .vjs-progress-holder {
             background: none;
         }
 
         .vjs-progress-control .vjs-play-progress {
             background: rgba(255, 255, 255, 1);
+
+            &:before {
+                color: rgba(255, 255, 255, 1);
+            }
         }
         
         .vjs-progress-control .vjs-load-progress {
