@@ -74,6 +74,19 @@ const Container = styled.div`
             }
         }
     }
+
+    .error {
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            font-family: 'Poppins';
+            text-align: center;
+        }
+    }
 `;
 
 const Video = () => {
@@ -81,6 +94,7 @@ const Video = () => {
     const { id } = useParams();
     const [ loading, setLoading ] = useState(false);
     const [ video, setVideo ] = useState(null);
+    const [ error, setError ] = useState('');
 
     useEffect(() => {
         (async() => {
@@ -90,7 +104,7 @@ const Video = () => {
                 setLoading(false);
             } catch(err) {
                 setLoading(false);
-                alert(err);
+                setError('Could not load video! Try again later');
             }
         })();
         // eslint-disable-next-line
@@ -98,51 +112,58 @@ const Video = () => {
 
     return !loading ? (
         <Container darkMode={darkMode}>
-            <div>
-                <h1>Video</h1>
-            </div>
-            <Player
-                autoplay={true}
-                controls={true}
-                sources={[
-                    { 
-                        src: video && video.source,
-                        type: 'video/mp4'
-                    }
-                ]}
-            />
-            <div className='info'>
-                <div className='meta'>
-                    <h1>{video && video.title}</h1>
-                    <h3>{video && video.description}</h3>
-                </div>
-                <div className='views'>
-                    <svg className='eye' viewBox="0 0 26.292 19.667">
-                        <g transform='translate(0 -3)'>
-                            <path d="M1,12.833S5.417,4,13.146,4s12.146,8.833,12.146,8.833-4.417,8.833-12.146,8.833S1,12.833,1,12.833Z" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                            <circle cx="3.5" cy="3.5" r="3.5" transform="translate(10 9)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                        </g>
-                    </svg>
-                    <p>{video && video.views}</p>
-                </div>
-            </div>
-            <div className='user'>
-                <div className='profile'>
-                    {
-                        video && video.user.photoURL ? (
-                            <div className='avatar' style={{ backgroundImage: `url(${video && video.user.photoURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                        ) : (
-                            <svg viewBox="0 0 34 34">
-                                <g transform="translate(1 1.247)">
-                                    <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                    <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                </g>
-                            </svg>
-                        )
-                    }
-                </div>
-                <h3>{video && video.user.displayName}</h3>
-            </div>
+            { error && <div className='error'><h1>{error}</h1></div> }
+            {
+                video && (
+                    <>
+                        <div>
+                            <h1>Video</h1>
+                        </div>
+                        <Player
+                            autoplay={true}
+                            controls={true}
+                            sources={[
+                                {
+                                    src: video && video.source,
+                                    type: 'video/mp4'
+                                }
+                            ]}
+                        />
+                        <div className='info'>
+                            <div className='meta'>
+                                <h1>{video && video.title}</h1>
+                                <h3>{video && video.description}</h3>
+                            </div>
+                            <div className='views'>
+                                <svg className='eye' viewBox="0 0 26.292 19.667">
+                                    <g transform='translate(0 -3)'>
+                                        <path d="M1,12.833S5.417,4,13.146,4s12.146,8.833,12.146,8.833-4.417,8.833-12.146,8.833S1,12.833,1,12.833Z" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                        <circle cx="3.5" cy="3.5" r="3.5" transform="translate(10 9)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                                    </g>
+                                </svg>
+                                <p>{video && video.views}</p>
+                            </div>
+                        </div>
+                        <div className='user'>
+                            <div className='profile'>
+                                {
+                                    video && video.user.photoURL ? (
+                                        <div className='avatar' style={{ backgroundImage: `url(${video && video.user.photoURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    ) : (
+                                            <svg viewBox="0 0 34 34">
+                                                <g transform="translate(1 1.247)">
+                                                    <path d="M36,27.916V23.61C36,18.855,32.418,15,28,15H12c-4.418,0-8,3.855-8,8.61v4.305" transform="translate(-4 3.838)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                                    <ellipse cx="8" cy="9" rx="8" ry="9" transform="translate(8 -0.247)" fill="none" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                                </g>
+                                            </svg>
+                                        )
+                                }
+                            </div>
+                            <h3>{video && video.user.displayName}</h3>
+                        </div>
+                    </>
+                )
+            }
         </Container>
     ) : <Loader />;
 }
