@@ -70,7 +70,6 @@ const Form = styled.form`
         color: #FF4A4A;
         font-size: 0.8rem;
         width: 35vw;
-        overflow-wrap: break-word;
     }
 `;
 
@@ -112,7 +111,7 @@ const Authenticate = ({ close }) => {
                         onChange={form.handleChange} 
                         onBlur={form.handleBlur}
                     />
-                    {form.errors.email && form.touched.email && <p className='error'>{form.errors.email}</p>}
+                    { form.errors.email && form.touched.email && <p className='error'>{form.errors.email}</p> }
                     <input 
                         type='password' 
                         name='password' 
@@ -121,9 +120,9 @@ const Authenticate = ({ close }) => {
                         onChange={form.handleChange} 
                         onBlur={form.handleBlur}
                     />
-                    {form.errors.password && form.touched.password && <p className='error'>{form.errors.password}</p>}
+                    { form.errors.password && form.touched.password && <p className='error'>{form.errors.password}</p> }
                     <Button text='Proceed' mode='form' />
-                    {form.errors.authenticate && <p className='error'>{form.errors.authenticate}</p>}
+                    { form.errors.authenticate && <p className='error'>{form.errors.authenticate}</p> }
                 </div>
             </Form>
         </Overlay>
