@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MainContext } from '../contexts/MainContext';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import Alert from '../components/Alert';
 import Loader from '../components/Loader';
 
 const Container = styled.div`
@@ -95,11 +94,23 @@ const Container = styled.div`
             }
         }
     }
+
+    .error {
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            font-family: 'Poppins';
+            text-align: center;
+        }
+    }
 `;
 
 const Search = () => {
     const { searchResults, search, darkMode } = useContext(MainContext);
-    const [ alert, setAlert ] = useState(null);
     const [ loading, setLoading ] = useState(false);
     const { query } = useParams();
     const history = useHistory();
@@ -112,8 +123,6 @@ const Search = () => {
                 setLoading(false);
             } catch(err) {
                 setLoading(false);
-                setAlert({ type: 'failure', text: 'Error occured! Try again later' });
-                setTimeout(() => setAlert(null), 5000);
             }
         })();
         // eslint-disable-next-line
@@ -121,9 +130,8 @@ const Search = () => {
 
     return !loading ? (
         <Container darkMode={darkMode}>
-            { alert && <Alert type={alert.type} text={alert.text} /> }
             {
-                searchResults.length > 0 ? (
+                searchResults && searchResults.length > 0 ? (
                     <>
                         <h1>Results for: <span>{query}</span></h1>
                         <div className="videos">
@@ -173,7 +181,9 @@ const Search = () => {
                         </div>
                     </>
                 ) : (
-                    <h1>No Videos Found</h1>
+                    <div className='error'>
+                        <h1>No Videos Found</h1>
+                    </div>
                 )
             }
         </Container>
