@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MainContext } from '../contexts/MainContext';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import Alert from '../components/Alert';
 import Loader from '../components/Loader';
 
 const Container = styled.div`
@@ -95,11 +94,23 @@ const Container = styled.div`
             }
         }
     }
+
+    .error {
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            font-family: 'Poppins';
+            text-align: center;
+        }
+    }
 `;
 
 const Landing = () => {
     const { videos, getVideos, darkMode } = useContext(MainContext);
-    const [ alert, setAlert ] = useState(null);
     const [ loading, setLoading ] = useState(false);
     const history = useHistory();
 
@@ -111,8 +122,6 @@ const Landing = () => {
                 setLoading(false);
             } catch(err) {
                 setLoading(false);
-                setAlert({ type: 'failure', text: 'Error occured! Try again later' });
-                setTimeout(() => setAlert(null), 5000);
             }
         })();
         // eslint-disable-next-line
@@ -120,9 +129,8 @@ const Landing = () => {
 
     return !loading ? (
         <Container darkMode={darkMode}>
-            { alert && <Alert type={alert.type} text={alert.text} /> }
             {
-                videos.length > 0 ? (
+                videos && videos.length > 0 ? (
                     <>
                         <h1>Recent Videos</h1>
                         <div className="videos">
@@ -172,7 +180,9 @@ const Landing = () => {
                         </div>
                     </>
                 ) : (
-                    <h1>No Videos Available</h1>
+                    <div className='error'>
+                        <h1>No Videos Found</h1>
+                    </div>
                 )
             }
         </Container>
