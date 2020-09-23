@@ -362,7 +362,9 @@ const Settings = () => {
                                     await deleteAccount();
                                     history.push('/');
                                 } catch(err) {
-                                    alert('Error occured deleting account');
+                                    console.log(err);
+                                    setAlert({ type: 'failure', text: 'Error occured deleting account! Try again later' });
+                                    setTimeout(() => setAlert(null), 5000);
                                 }
                             }} />
                         </div>
