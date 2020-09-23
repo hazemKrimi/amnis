@@ -43,6 +43,26 @@ const MainContextProvider = ({ children }) => {
         }
     };
 
+    const incrementVideoViews = async video => {
+        try {
+            await firebase.firestore().collection('videos').doc(video.id).update({
+                views: video.views + 1
+            });
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    const deleteVideo = async id => {
+        try {
+            await firebase.storage().ref(`thumbnails/${id}.png`).delete();
+            await firebase.storage().ref(`videos/${id}.mp4`).delete();
+            await firebase.firestore().collection('videos').doc(id).delete();
+        } catch(err) {
+            throw err;
+        }
+    };
+
     const search = async query => {
         try {
             const videosSnapshot = await firebase.firestore().collection('videos').where('title', '==', query).get();
@@ -74,7 +94,23 @@ const MainContextProvider = ({ children }) => {
     };
     
     return (
-        <MainContext.Provider value={{ darkMode, offline, showSignUp, showLogIn, toggleDarkMode, videos, searchResults, getVideos, getVideo, search, addVideo }}>
+        <MainContext.Provider 
+            value={{ 
+                darkMode, 
+                offline, 
+                showSignUp, 
+                showLogIn, 
+                toggleDarkMode, 
+                videos, 
+                searchResults, 
+                getVideos, 
+                getVideo, 
+                search, 
+                addVideo,
+                incrementVideoViews,
+                deleteVideo
+            }}
+        >
             { children }
         </MainContext.Provider>
     )
