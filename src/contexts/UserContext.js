@@ -35,7 +35,7 @@ const UserContextProvider = ({ children }) => {
     const signUp = async(username, email, password) => {
         try {
             const { user } = await firebase.auth().createUserWithEmailAndPassword(email, password);
-            user.updateProfile({ displayName: username });
+            await user.updateProfile({ displayName: username });
             dispatch({ 
                 type: SIGN_UP,
                 payload: { 
@@ -103,9 +103,24 @@ const UserContextProvider = ({ children }) => {
 
     const deleteAccount = async() => {
         try {
-            await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
-            await firebase.auth().currentUser.delete();
-            dispatch({ type: DELETE_USER });
+            const videosSnapshot = await firebase.firestore().collection('videos').get();
+            let videos = [];
+            if (videosSnapshot) {
+                videosSnapshot.forEach(video => videos.push({ ...video.data(), id: video.id }));
+                videos = videos.filter(video => video.user.email === user.email);
+                await Promise.all(videos.forEach(async video => {
+                    await firebase.storage().ref(`thumbnails/${video.id}.png`).delete();
+                    await firebase.storage().ref(`videos/${video.id}.mp4`).delete();
+                    await firebase.firestore().collection('videos').doc(video.id).delete();
+                }));
+                await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
+                await firebase.auth().currentUser.delete();
+                dispatch({ type: DELETE_USER });
+            } else {
+                await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
+                await firebase.auth().currentUser.delete();
+                dispatch({ type: DELETE_USER });
+            }
         } catch(err) {
             throw err;
         }
