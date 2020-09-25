@@ -81,6 +81,7 @@ const MainContextProvider = ({ children }) => {
                 description,
                 live: false,
                 user,
+                userEmail: user.email,
                 views: 0
             });
             const videoSnapshot = await firebase.storage().ref(`videos/${videoRef.id}.mp4`).put(video);
