@@ -42,7 +42,7 @@ const UserContextProvider = ({ children }) => {
                     displayName: user.providerData[0].displayName,
                     email: user.providerData[0].email,
                     photoURL: user.providerData[0].photoURL,
-                    uid: user.providerData[0].uid 
+                    uid: user.uid
                 }
             });
         } catch(err) {
@@ -59,7 +59,7 @@ const UserContextProvider = ({ children }) => {
                     displayName: user.providerData[0].displayName,
                     email: user.providerData[0].email,
                     photoURL: user.providerData[0].photoURL,
-                    uid: user.providerData[0].uid
+                    uid: user.uid
                 }
             });
         } catch(err) {
@@ -87,6 +87,23 @@ const UserContextProvider = ({ children }) => {
                 avatar = url;
             }
             if (password) await firebase.auth().currentUser.updatePassword(password);
+            const videosSnapshot = await firebase.firestore().collection('videos').where('userEmail', '==', user.email).get();
+            const videos = [];
+            videosSnapshot.forEach(video => videos.push({ ...video.data(), id: video.id }));
+            if (videos.length > 0) {
+                await Promise.all(videos.map(async video => {
+                    await firebase.firestore().collection('videos').doc(video.id).update({
+                        user: { 
+                            ...user,
+                            displayName: username ? username : firebase.auth().currentUser.displayName,
+                            email: email ? email : firebase.auth().currentUser.email,
+                            photoURL: avatar ? avatar : firebase.auth().currentUser.photoURL,
+                            uid: firebase.auth().currentUser.uid
+                        },
+                        userEmail: email ? email : firebase.auth().currentUser.email
+                    });
+                }));
+            }
             dispatch({
                 type: UPDATE_USER,
                 payload: {
@@ -103,21 +120,20 @@ const UserContextProvider = ({ children }) => {
 
     const deleteAccount = async() => {
         try {
-            const videosSnapshot = await firebase.firestore().collection('videos').get();
-            let videos = [];
-            if (videosSnapshot) {
-                videosSnapshot.forEach(video => videos.push({ ...video.data(), id: video.id }));
-                videos = videos.filter(video => video.user.email === user.email);
-                await Promise.all(videos.forEach(async video => {
+            const videosSnapshot = await firebase.firestore().collection('videos').where('userEmail', '==', user.email).get();
+            const videos = [];
+            videosSnapshot.forEach(video => videos.push({ ...video.data(), id: video.id }));
+            if (videos.length > 0) {
+                await Promise.all(videos.map(async video => {
                     await firebase.storage().ref(`thumbnails/${video.id}.png`).delete();
                     await firebase.storage().ref(`videos/${video.id}.mp4`).delete();
                     await firebase.firestore().collection('videos').doc(video.id).delete();
                 }));
-                await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
+                if (user.photoURL) await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
                 await firebase.auth().currentUser.delete();
                 dispatch({ type: DELETE_USER });
             } else {
-                await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
+                if (user.photoURL) await firebase.storage().ref(`avatars/${firebase.auth().currentUser.uid}.png`).delete();
                 await firebase.auth().currentUser.delete();
                 dispatch({ type: DELETE_USER });
             }
