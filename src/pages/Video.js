@@ -43,6 +43,7 @@ const Container = styled.div`
                 column-gap: 0.5rem;
 
                 .eye {
+                    cursor: auto;
                     width: 1.5rem;
                     height: 1.5rem;
                 }
