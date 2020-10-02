@@ -173,7 +173,7 @@ const Video = () => {
                                     <p>{video && video.views}</p>
                                 </div>
                                 {
-                                    video && video.user.email === user.email && (
+                                    video && video.user.email === user?.email && (
                                         <div className="settings">
                                             <svg viewBox="0 0 50.299 55.666" onClick={async() => {
                                                 try {
