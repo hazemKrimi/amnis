@@ -11,8 +11,10 @@ const Nav = lazy(() => import('./components/Nav'));
 const Landing = lazy(() => import('./pages/Landing'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Upload = lazy(() => import('./pages/Upload'));
+const Stream = lazy(() => import('./pages/Stream'));
 const Search = lazy(() => import('./pages/Search'));
 const Video = lazy(() => import('./pages/Video'));
+const Live = lazy(() => import('./pages/Live'));
 
 const Offline = styled.div`
   height: 100vh;
@@ -54,11 +56,17 @@ const App = () => {
                       <Route path='/upload' exact>
                         <Upload />
                       </Route>
+                      <Route path='/stream' exact>
+                        <Stream />
+                      </Route>
                       <Route path='/search/:query' exact>
                         <Search />
                       </Route>
                       <Route path='/video/:id' exact>
                         <Video />
+                      </Route>
+                      <Route path='/live/:id' exact>
+                        <Live />
                       </Route>
                     </Switch>
                   </>
