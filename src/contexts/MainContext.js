@@ -55,8 +55,9 @@ const MainContextProvider = ({ children }) => {
 
     const deleteVideo = async id => {
         try {
-            await firebase.storage().ref(`thumbnails/${id}.png`).delete();
-            await firebase.storage().ref(`videos/${id}.mp4`).delete();
+            const video = await firebase.firestore().collection('videos').doc(id).get();
+            if (video.thumbnail) await firebase.storage().ref(`thumbnails/${id}.png`).delete();
+            if (video.source) await firebase.storage().ref(`videos/${id}.mp4`).delete();
             await firebase.firestore().collection('videos').doc(id).delete();
         } catch(err) {
             throw err;
@@ -93,10 +94,39 @@ const MainContextProvider = ({ children }) => {
             throw err;
         }
     };
+
+    const addLiveVideo = async(title, description) => {
+        try {
+            const videoRef = await firebase.firestore().collection('videos').add({ 
+                title, 
+                description,
+                live: true,
+                user,
+                userEmail: user.email,
+                views: 0
+            });
+            return videoRef.id;
+        } catch(err) {
+            throw err;
+        }
+    };
+
+    const saveLiveVideo = async(id, blob) => {
+        try {
+            const videoSnapshot = await firebase.storage().ref(`videos/${id}.mp4`).put(blob);
+            const videoUrl = await videoSnapshot.ref.getDownloadURL();
+            await firebase.firestore().collection('videos').doc(id).update({
+                source: videoUrl,
+                live: false
+            });
+        } catch(err) {
+            throw err;
+        }
+    };
     
     return (
         <MainContext.Provider 
-            value={{ 
+            value={{
                 darkMode, 
                 offline, 
                 showSignUp, 
@@ -109,7 +139,9 @@ const MainContextProvider = ({ children }) => {
                 search, 
                 addVideo,
                 incrementVideoViews,
-                deleteVideo
+                deleteVideo,
+                addLiveVideo,
+                saveLiveVideo
             }}
         >
             { children }
