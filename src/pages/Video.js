@@ -144,9 +144,7 @@ const Video = () => {
             {
                 video && !error ? (
                     <>
-                        <div>
-                            <h1>Video</h1>
-                        </div>
+                        <h1>Video</h1>
                         <Player
                             autoplay={false}
                             controls={true}
