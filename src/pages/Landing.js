@@ -3,6 +3,8 @@ import { MainContext } from '../contexts/MainContext';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Loader from '../components/Loader';
+import NoThumbnail from '../assets/no-thumbnail.jpg';
+import LiveThumbnail from '../assets/live.png';
 
 const Container = styled.div`
     width: 90%;
@@ -137,12 +139,23 @@ const Landing = () => {
                             {
                                 videos.map(video => (
                                     <div className="video" key={video.id}>
-                                        <img 
-                                            src={video.thumbnail}
-                                            alt='Video thumbnail'
-                                            className='thumbnail'
-                                            onClick={() => history.push(`video/${video.id}`)}
-                                        />
+                                        {
+                                            video.live ? (
+                                                <img
+                                                    src={LiveThumbnail}
+                                                    alt='Video thumbnail'
+                                                    className='thumbnail'
+                                                    onClick={() => history.push(`live/${video.id}`)}
+                                                />
+                                            ) : (
+                                                <img 
+                                                    src = {video.thumbnail ? video.thumbnail : NoThumbnail}
+                                                    alt='Video thumbnail'
+                                                    className='thumbnail'
+                                                    onClick={() => history.push(`video/${video.id}`)}
+                                                />
+                                            )
+                                        }
                                         <div className="info">
                                             <div className="profile">
                                                 {
@@ -159,7 +172,7 @@ const Landing = () => {
                                                 }
                                             </div>
                                             <div className="meta">
-                                                <h3 onClick={() => history.push(`video/${video.id}`)}>
+                                                <h3 onClick={() => video.live ? history.push(`live/${video.id}`) : history.push(`video/${video.id}`)}>
                                                     {video.title}
                                                 </h3>
                                                 <h5>{video.user.displayName}</h5>
