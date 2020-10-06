@@ -105,7 +105,7 @@ const Menu = ({ position, close, type }) => {
                     </svg>
                 <h3>Upload</h3>
             </div>
-            <div className="menu-item">
+            <div className="menu-item" onClick={() => { close(); history.push('/stream'); }}>
                     <svg viewBox="0 0 39.333 29.229">
                         <g transform="translate(-1.002 -3.516)">
                             <circle cx="3.734" cy="3.734" r="3.734" transform="translate(16.935 14.396)" strokeWidth="2" stroke={darkMode ? '#FFFFFF' : '#07070A'} strokeLinecap="round" strokeLinejoin="round" fill="none" />
