@@ -156,7 +156,8 @@ const VideoContainer = styled.div`
 
 const Player = props => {
     const [ player, setPlayer ] = useState();
-    const playerRef = useRef();
+    const ref = useRef();
+    const playerRef = props.video ? props.video : ref;
 
     useEffect(() => {
         setPlayer(videojs(playerRef.current, props));
