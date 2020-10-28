@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Loader from '../components/Loader';
 import NoThumbnail from '../assets/no-thumbnail.jpg';
-import LiveThumbnail from '../assets/live.png';
 
 const Container = styled.div`
     width: 90%;
@@ -18,12 +17,13 @@ const Container = styled.div`
     .videos {
         margin-top: 2rem;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         justify-content: center;
         align-items: center;
         grid-gap: 2rem;
 
         .video {
+            width: 100%;
             display: grid;
             grid-template-columns: 1fr;
             justify-content: center;
@@ -31,9 +31,33 @@ const Container = styled.div`
             row-gap: 0.5rem;
 
             .thumbnail {
-                cursor: pointer;
-                width: 100%;
-                height: 200px;
+                height: 0;
+                overflow: hidden;
+                padding-top: calc(591.44 / 1127.34 * 100%);
+                position: relative;
+
+                img {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .live {
+                    position: absolute;
+                    display: grid;
+                    justify-content: center;
+                    align-items: center;
+                    border: 1px solid #FF4A4A;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    font-size: 2.5rem;
+                    color: #FF4A4A;
+                    text-align: center;
+                }
             }
 
             .info {
@@ -141,19 +165,19 @@ const Landing = () => {
                                     <div className="video" key={video.id}>
                                         {
                                             video.live ? (
-                                                <img
-                                                    src={LiveThumbnail}
-                                                    alt='Video thumbnail'
+                                                <div 
                                                     className='thumbnail'
                                                     onClick={() => history.push(`live/${video.id}`)}
-                                                />
+                                                >
+                                                    <h2 className='live'>LIVE</h2>
+                                                </div>
                                             ) : (
-                                                <img 
-                                                    src = {video.thumbnail ? video.thumbnail : NoThumbnail}
-                                                    alt='Video thumbnail'
+                                                <div
                                                     className='thumbnail'
                                                     onClick={() => history.push(`video/${video.id}`)}
-                                                />
+                                                >
+                                                    <img alt='thumbnail' src={video.thumbnail ? video.thumbnail : NoThumbnail} />
+                                                </div>
                                             )
                                         }
                                         <div className="info">
