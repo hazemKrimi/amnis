@@ -3,7 +3,6 @@ import { MainContext } from '../contexts/MainContext';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Loader from '../components/Loader';
-import NoThumbnail from '../assets/no-thumbnail.jpg';
 
 const Container = styled.div`
     width: 90%;
@@ -56,6 +55,21 @@ const Container = styled.div`
                     height: 100%;
                     font-size: 2.5rem;
                     color: #FF4A4A;
+                    text-align: center;
+                }
+
+                .no-thumbnail {
+                    position: absolute;
+                    display: grid;
+                    justify-content: center;
+                    align-items: center;
+                    border: 1px solid ${({ darkMode }) => darkMode ? '#FFFFFF' : '#07070A'};
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    font-size: 2.5rem;
+                    color: ${({ darkMode }) => darkMode ? '#FFFFFF' : '#07070A'};
                     text-align: center;
                 }
             }
@@ -176,7 +190,13 @@ const Landing = () => {
                                                     className='thumbnail'
                                                     onClick={() => history.push(`video/${video.id}`)}
                                                 >
-                                                    <img alt='thumbnail' src={video.thumbnail ? video.thumbnail : NoThumbnail} />
+                                                    {
+                                                        video.thumbnail ? (
+                                                            <img alt='thumbnail' src={video.thumbnail} />
+                                                        ) : (
+                                                            <h2 className='no-thumbnail'>No Thumbnail</h2>
+                                                        )
+                                                    }
                                                 </div>
                                             )
                                         }

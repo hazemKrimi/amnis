@@ -45,7 +45,6 @@ const Search = () => {
         },
         onSubmit: async({ query }) => {
             try {
-                history.push('/');
                 history.push(`/search/${query}`);
             } catch(err) {
                 console.log(err);
@@ -61,7 +60,7 @@ const Search = () => {
                 type='text' 
                 name='query' 
                 placeholder='Search'
-                value={form.query}
+                value={form.values.query}
                 onChange={form.handleChange}
                 onBlur={form.handleBlur}
             />
