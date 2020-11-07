@@ -1,7 +1,5 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { ReactMediaRecorder } from 'react-media-recorder';
-import Streamer from '../components/Streamer';
 
 const Container = styled.div`
     width: 90%;
@@ -14,29 +12,27 @@ const Container = styled.div`
         font-family: 'Poppins';
         font-size: 40;
     }
+
+    .error {
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            font-family: 'Poppins';
+            text-align: center;
+        }
+    }
 `;
 
 const Stream = () => {
-    const videoRef = useRef(null);
-
     return (
         <Container>
-            <h1>Stream</h1>
-            <ReactMediaRecorder
-                video
-                render={({ previewStream }) => (
-                    <>
-                        <Streamer
-                            autoplay={true}
-                            muted={true}
-                            controls={false}
-                            video={videoRef}
-                            stream={previewStream}
-                        />
-                    </>
-                )}
-            >
-            </ReactMediaRecorder>
+            <div className='error'>
+                <h1>Work In Progress</h1>
+            </div>
         </Container>
     );
 }
