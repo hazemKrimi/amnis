@@ -22,6 +22,7 @@ const Container = styled.div`
         grid-gap: 2rem;
 
         .video {
+            cursor: pointer;
             width: 100%;
             display: grid;
             grid-template-columns: 1fr;

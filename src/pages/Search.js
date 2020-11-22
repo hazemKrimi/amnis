@@ -14,6 +14,7 @@ const Container = styled.div`
     }
 
     .videos {
+        cursor: pointer;
         margin-top: 2rem;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
