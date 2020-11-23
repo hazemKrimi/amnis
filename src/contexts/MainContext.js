@@ -17,8 +17,8 @@ const MainContextProvider = ({ children }) => {
     useEffect(() => {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) dispatch({ type: TOGGLE_DARK_MODE });
         
-        window.addEventListener('offline', () => dispatch({ type: SET_OFFLINE }));
-        window.addEventListener('online', () => dispatch({ type: SET_ONLINE }));
+        window.addEventListener('online', () => dispatch({ type: navigator.onLine ? SET_ONLINE : SET_OFFLINE }));
+        window.addEventListener('offline', () => dispatch({ type: navigator.onLine ? SET_ONLINE : SET_OFFLINE }));
     }, []);
     
     const toggleDarkMode = () => dispatch({ type: TOGGLE_DARK_MODE });
