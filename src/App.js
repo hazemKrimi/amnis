@@ -17,15 +17,21 @@ const Video = lazy(() => import('./pages/Video'));
 const Live = lazy(() => import('./pages/Live'));
 
 const Offline = styled.div`
-  height: 100vh;
-  display: grid;
-  grid-template-rows: auto;
-  justify-content: center;
-  align-items: center;
+  background: #777777;
+  height: auto;
+  padding: 0.5rem 0rem;
 
-  h1, h3 {
-    font-family: 'Poppins';
-    text-align: center;
+  div {
+    width: 90%;
+    margin: auto;
+    display: grid;
+    grid-template-rows: auto;
+    align-items: center;
+  
+    h3, h4 {
+      font-family: 'Poppins';
+      text-align: left;
+    }
   }
 `;
 
@@ -42,43 +48,40 @@ const App = () => {
           <>
             <GlobalStyles />
             <Suspense fallback={<Loader />}>
+              <Nav />
               {
-                !offline ? (
-                  <>
-                    <Nav />
-                    <Switch>
-                      <Route path='/' exact>
-                        <Landing />
-                      </Route>
-                      <Route path='/settings' exact>
-                        <Settings />
-                      </Route>
-                      <Route path='/upload' exact>
-                        <Upload />
-                      </Route>
-                      <Route path='/stream' exact>
-                        <Stream />
-                      </Route>
-                      <Route path='/search/:query' exact>
-                        <Search />
-                      </Route>
-                      <Route path='/video/:id' exact>
-                        <Video />
-                      </Route>
-                      <Route path='/live/:id' exact>
-                        <Live />
-                      </Route>
-                    </Switch>
-                  </>
-                ) : (
+                offline && (
                   <Offline>
                     <div>
-                      <h1>You are currently offline</h1>
-                      <h3>Check your internet connection and try again</h3>
+                      <h3>You are currently offline</h3>
+                      <h4>Check your internet connection and try again</h4>
                     </div>
                   </Offline>
                 )
               }
+              <Switch>
+                <Route path='/' exact>
+                  <Landing />
+                </Route>
+                <Route path='/settings' exact>
+                  <Settings />
+                </Route>
+                <Route path='/upload' exact>
+                  <Upload />
+                </Route>
+                <Route path='/stream' exact>
+                  <Stream />
+                </Route>
+                <Route path='/search/:query' exact>
+                  <Search />
+                </Route>
+                <Route path='/video/:id' exact>
+                  <Video />
+                </Route>
+                <Route path='/live/:id' exact>
+                  <Live />
+                </Route>
+              </Switch>
             </Suspense>
           </>
         )
