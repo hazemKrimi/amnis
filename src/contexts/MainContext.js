@@ -1,152 +1,146 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
-import { reducer, TOGGLE_DARK_MODE, SET_OFFLINE, SET_ONLINE, GET_VIDEOS, SEARCH } from './reducers/mainReducer';
+import {
+	reducer,
+	TOGGLE_DARK_MODE,
+	SET_OFFLINE,
+	SET_ONLINE,
+	GET_VIDEOS,
+	SEARCH
+} from './reducers/mainReducer';
 import firebase from '../config/firebase';
 import { UserContext } from './UserContext';
 
 export const MainContext = createContext();
 
 const MainContextProvider = ({ children }) => {
-    const [{ darkMode, offline, showSignUp, showLogIn, videos, searchResults }, dispatch] = useReducer(reducer, {
-        darkMode: false, 
-        offline: false,
-        videos: [],
-        searchResults: []
-    });
-    const { user } = useContext(UserContext);
+	const [
+		{ darkMode, offline, showSignUp, showLogIn, videos, searchResults },
+		dispatch
+	] = useReducer(reducer, {
+		darkMode: false,
+		offline: false,
+		videos: [],
+		searchResults: []
+	});
+	const { user } = useContext(UserContext);
 
-    useEffect(() => {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) dispatch({ type: TOGGLE_DARK_MODE });
-        
-        window.addEventListener('online', () => dispatch({ type: navigator.onLine ? SET_ONLINE : SET_OFFLINE }));
-        window.addEventListener('offline', () => dispatch({ type: navigator.onLine ? SET_ONLINE : SET_OFFLINE }));
-    }, []);
-    
-    const toggleDarkMode = () => dispatch({ type: TOGGLE_DARK_MODE });
+	useEffect(() => {
+		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+			dispatch({ type: TOGGLE_DARK_MODE });
 
-    const getVideos = async() => {
-        try {
-            const videosSnapshot = await firebase.firestore().collection('videos').get();
-            const videosPayload = [];
-            videosSnapshot.forEach(video => videosPayload.push({ ...video.data(), id: video.id }));
-            dispatch({ type: GET_VIDEOS, payload: videosPayload });
-        } catch(err) {
-            throw err;
-        }
-    };
+		window.addEventListener('online', () =>
+			dispatch({ type: navigator.onLine ? SET_ONLINE : SET_OFFLINE })
+		);
+		window.addEventListener('offline', () =>
+			dispatch({ type: navigator.onLine ? SET_ONLINE : SET_OFFLINE })
+		);
+	}, []);
 
-    const getVideo = async id => {
-        try {
-            const video = await firebase.firestore().collection('videos').doc(id).get();
-            return { ...video.data(), id: video.id };
-        } catch (err) {
-            throw err;
-        }
-    };
+	const toggleDarkMode = () => dispatch({ type: TOGGLE_DARK_MODE });
 
-    const incrementVideoViews = async video => {
-        try {
-            await firebase.firestore().collection('videos').doc(video.id).update({
-                views: video.views + 1
-            });
-        } catch(err) {
-            throw err;
-        }
-    }
+	const getVideos = async () => {
+		try {
+			const videosSnapshot = await firebase.firestore().collection('videos').get();
+			const videosPayload = [];
+			videosSnapshot.forEach(video => videosPayload.push({ ...video.data(), id: video.id }));
+			dispatch({ type: GET_VIDEOS, payload: videosPayload });
+		} catch (err) {
+			throw err;
+		}
+	};
 
-    const deleteVideo = async id => {
-        try {
-            const video = await firebase.firestore().collection('videos').doc(id).get();
-            if (video.thumbnail) await firebase.storage().ref(`thumbnails/${id}.png`).delete();
-            if (video.source) await firebase.storage().ref(`videos/${id}.mp4`).delete();
-            await firebase.firestore().collection('videos').doc(id).delete();
-        } catch(err) {
-            throw err;
-        }
-    };
+	const getVideo = async id => {
+		try {
+			const video = await firebase.firestore().collection('videos').doc(id).get();
+			return { ...video.data(), id: video.id };
+		} catch (err) {
+			throw err;
+		}
+	};
 
-    const search = async query => {
-        try {
-            const videosSnapshot = await firebase.firestore().collection('videos').where('title', '==', query).get();
-            const videosPayload = [];
-            videosSnapshot.forEach(video => videosPayload.push({ ...video.data(), id: video.id }));
-            dispatch({ type: SEARCH, payload: videosPayload });
-        } catch(err) {
-            throw err;
-        }
-    }
+	const incrementVideoViews = async video => {
+		try {
+			await firebase
+				.firestore()
+				.collection('videos')
+				.doc(video.id)
+				.update({
+					views: video.views + 1
+				});
+		} catch (err) {
+			throw err;
+		}
+	};
 
-    const addVideo = async(title, description, video, thumbnail) => {
-        try {
-            const videoRef = await firebase.firestore().collection('videos').add({ 
-                title, 
-                description,
-                live: false,
-                user,
-                userEmail: user.email,
-                views: 0
-            });
-            const videoSnapshot = await firebase.storage().ref(`videos/${videoRef.id}.mp4`).put(video);
-            const videoUrl = await videoSnapshot.ref.getDownloadURL();
-            const thumbnailSnapshot = await firebase.storage().ref(`thumbnails/${videoRef.id}.png`).put(thumbnail);
-            const thumbnailoUrl = await thumbnailSnapshot.ref.getDownloadURL();
-            await videoRef.update({ source: videoUrl, thumbnail: thumbnailoUrl });
-        } catch(err) {
-            throw err;
-        }
-    };
+	const deleteVideo = async id => {
+		try {
+			const video = await firebase.firestore().collection('videos').doc(id).get();
+			if (video.thumbnail) await firebase.storage().ref(`thumbnails/${id}.png`).delete();
+			if (video.source) await firebase.storage().ref(`videos/${id}.mp4`).delete();
+			await firebase.firestore().collection('videos').doc(id).delete();
+		} catch (err) {
+			throw err;
+		}
+	};
 
-    const addLiveVideo = async(title, description) => {
-        try {
-            const videoRef = await firebase.firestore().collection('videos').add({ 
-                title, 
-                description,
-                live: true,
-                user,
-                userEmail: user.email,
-                views: 0
-            });
-            return videoRef.id;
-        } catch(err) {
-            throw err;
-        }
-    };
+	const search = async query => {
+		try {
+			const videosSnapshot = await firebase
+				.firestore()
+				.collection('videos')
+				.where('title', '==', query)
+				.get();
+			const videosPayload = [];
+			videosSnapshot.forEach(video => videosPayload.push({ ...video.data(), id: video.id }));
+			dispatch({ type: SEARCH, payload: videosPayload });
+		} catch (err) {
+			throw err;
+		}
+	};
 
-    const saveLiveVideo = async(id, blob) => {
-        try {
-            const videoSnapshot = await firebase.storage().ref(`videos/${id}.mp4`).put(blob);
-            const videoUrl = await videoSnapshot.ref.getDownloadURL();
-            await firebase.firestore().collection('videos').doc(id).update({
-                source: videoUrl,
-                live: false
-            });
-        } catch(err) {
-            throw err;
-        }
-    };
-    
-    return (
-        <MainContext.Provider 
-            value={{
-                darkMode, 
-                offline, 
-                showSignUp, 
-                showLogIn, 
-                toggleDarkMode, 
-                videos, 
-                searchResults, 
-                getVideos, 
-                getVideo, 
-                search, 
-                addVideo,
-                incrementVideoViews,
-                deleteVideo,
-                addLiveVideo,
-                saveLiveVideo
-            }}
-        >
-            { children }
-        </MainContext.Provider>
-    )
+	const addVideo = async (title, description, video, thumbnail) => {
+		try {
+			const videoRef = await firebase.firestore().collection('videos').add({
+				title,
+				description,
+				user,
+				userEmail: user.email,
+				views: 0
+			});
+			const videoSnapshot = await firebase.storage().ref(`videos/${videoRef.id}.mp4`).put(video);
+			const videoUrl = await videoSnapshot.ref.getDownloadURL();
+			const thumbnailSnapshot = await firebase
+				.storage()
+				.ref(`thumbnails/${videoRef.id}.png`)
+				.put(thumbnail);
+			const thumbnailoUrl = await thumbnailSnapshot.ref.getDownloadURL();
+			await videoRef.update({ source: videoUrl, thumbnail: thumbnailoUrl });
+		} catch (err) {
+			throw err;
+		}
+	};
+
+	return (
+		<MainContext.Provider
+			value={{
+				darkMode,
+				offline,
+				showSignUp,
+				showLogIn,
+				toggleDarkMode,
+				videos,
+				searchResults,
+				getVideos,
+				getVideo,
+				search,
+				addVideo,
+				incrementVideoViews,
+				deleteVideo
+			}}
+		>
+			{children}
+		</MainContext.Provider>
+	);
 };
 
 export default MainContextProvider;
